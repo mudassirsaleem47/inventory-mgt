@@ -1,0 +1,14 @@
+{
+  "name": "inventory-management-system",
+  "version": "1.0.0",
+  "description": "Inventory Management System with Node backend and React frontend",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
+    "start": "concurrently \"npm run start --prefix server\" \"npm run preview --prefix client\"",
+    "install-all": "npm install --prefix server && npm install --prefix client"
+  },
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

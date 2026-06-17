@@ -1,0 +1,155 @@
+import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import {
+  Box,
+  Card,
+  CardContent,
+  Typography,
+  TextField,
+  Button,
+  Alert
+} from '@mui/material';
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
+const Register = () => {
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: ''
+  });
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+
+    try {
+      const response = await fetch(`${API_URL}/api/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || 'Registration failed');
+      }
+
+      navigate('/login');
+    } catch (err) {
+      setError(err.message || 'Server error. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <Box
+      sx={{
+        minHeight: '100vh',
+        width: '100vw',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#f5f5f5'
+      }}
+    >
+      <Box sx={{ width: '100%', maxWidth: 360 }}>
+        <Card sx={{ p: 4 }}>
+          <form onSubmit={handleSubmit}>
+            <Box sx={{ mb: 2, textAlign: 'center' }}>
+              <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
+                StockSphere
+              </Typography>
+              <Typography variant="caption" color="text.secondary">
+                Create an account
+              </Typography>
+            </Box>
+
+            {error && (
+              <Alert severity="error" sx={{ mb: 2 }}>
+                {error}
+              </Alert>
+            )}
+
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              <TextField
+                label="Full Name"
+                name="name"
+                variant="standard"
+                autoComplete='off'
+                required
+                fullWidth
+                size="small"
+                value={formData.name}
+                onChange={handleChange}
+              />
+
+              <TextField
+                label="Email"
+                variant="standard"
+                type="email"
+                name="email"
+                autoComplete='off'
+                required
+                fullWidth
+                size="small"
+                value={formData.email}
+                onChange={handleChange}
+              />
+
+              <TextField
+                label="Password"
+                type="password"
+                variant="standard"
+                name="password"
+                autoComplete='off'
+                required
+                fullWidth
+                size="small"
+                value={formData.password}
+                onChange={handleChange}
+              />
+
+              <Button
+                type="submit"
+                disabled={loading}
+                variant="contained"
+                fullWidth
+              >
+                {loading ? 'Submitting...' : 'Register'}
+              </Button>
+            </Box>
+
+            <Box sx={{ display: 'flex', justifyContent: 'center', gap: 0.5, mt: 2 }}>
+              <Typography variant="caption" color="text.secondary">
+                Already have an account?
+              </Typography>
+              <Typography
+                component={Link}
+                to="/login"
+                variant="caption"
+                sx={{ color: '#1976d2', textDecoration: 'none', fontWeight: 'bold' }}
+              >
+                Login
+              </Typography>
+            </Box>
+          </form>
+        </Card>
+      </Box>
+    </Box>
+  );
+};
+
+export default Register;
