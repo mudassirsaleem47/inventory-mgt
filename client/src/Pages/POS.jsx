@@ -31,7 +31,7 @@ import {
 } from '@mui/material';
 import { Delete as DeleteIcon, Print as PrintIcon, Clear as ClearIcon, Add as AddIcon, QrCodeScanner as QrCodeScannerIcon } from '@mui/icons-material';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const API_URL = import.meta.env.VITE_API_URL || (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'http://localhost:5000' : window.location.origin);
 
 const POS = () => {
   const navigate = useNavigate();
