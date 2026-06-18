@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import {
   AppBar,
@@ -8,7 +8,8 @@ import {
   IconButton,
   Badge,
   TextField,
-  InputAdornment
+  InputAdornment,
+  LinearProgress
 } from '@mui/material';
 import {
   Search as SearchIcon,
@@ -18,7 +19,16 @@ import {
 } from '@mui/icons-material';
 
 const DashboardHeader = ({ onMenuClick, onCollapseToggle, isCollapsed }) => {
+  const location = useLocation();
+  const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    setLoading(true);
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 450);
+    return () => clearTimeout(timer);
+  }, [location.pathname]);
 
   return (
     <AppBar
@@ -30,6 +40,22 @@ const DashboardHeader = ({ onMenuClick, onCollapseToggle, isCollapsed }) => {
         color: '#1e293b'
       }}
     >
+      {loading && (
+        <LinearProgress 
+          sx={{ 
+            height: 3, 
+            position: 'absolute', 
+            top: 0, 
+            left: 0, 
+            right: 0,
+            zIndex: 1101,
+            bgcolor: '#eff6ff',
+            '& .MuiLinearProgress-bar': {
+              backgroundColor: '#2563eb'
+            }
+          }} 
+        />
+      )}
       <Toolbar sx={{ justifyContent: 'space-between', px: { xs: 2, md: 3 }, py: 1, minHeight: '5.5' }}>
 
         {/* Left Container: Mobile menu and Search Bar */}

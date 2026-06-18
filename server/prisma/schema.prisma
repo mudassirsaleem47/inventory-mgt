@@ -3,6 +3,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  output   = "../src/generated/client"
 }
 
 datasource db {
@@ -68,6 +69,7 @@ model Product {
   price      Float      @default(0)
   stock      Float      @default(0)
   unit       String     @default("pcs")
+  expiryDate DateTime?
   categoryId String?
   category   Category?  @relation(fields: [categoryId], references: [id])
   createdAt  DateTime   @default(now())
@@ -123,4 +125,48 @@ model SupplierInvoiceItem {
   rate      Float
   total     Float
   invoice   SupplierInvoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+}
+
+model Customer {
+  id            String   @id @default(uuid())
+  name          String
+  phone         String?
+  email         String?
+  address       String?
+  loyaltyPoints Int      @default(0)
+  createdAt     DateTime @default(now())
+}
+
+model Expense {
+  id          String   @id @default(uuid())
+  title       String
+  category    String
+  amount      Float
+  date        DateTime
+  description String?
+  createdAt   DateTime @default(now())
+}
+
+model Loan {
+  id           String   @id @default(uuid())
+  partnerName  String
+  type         String   // Payable, Receivable
+  amount       Float
+  interestRate Float    @default(0)
+  dueDate      DateTime
+  status       String   @default("Active")
+  description  String?
+  createdAt    DateTime @default(now())
+}
+
+model Staff {
+  id        String   @id @default(uuid())
+  name      String
+  email     String?
+  phone     String?
+  role      String
+  salary    Float
+  dateHired DateTime
+  status    String   @default("Active")
+  createdAt DateTime @default(now())
 }

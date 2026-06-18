@@ -7,6 +7,14 @@ const categoryRoutes = require('./routes/categoryRoutes');
 const warehouseRoutes = require('./routes/warehouseRoutes');
 const supplierInvoiceRoutes = require('./routes/supplierInvoiceRoutes');
 const { protect } = require('./middleware/authMiddleware');
+const productRoutes = require('./routes/productRoutes');
+const saleRoutes = require('./routes/saleRoutes');
+const settingRoutes = require('./routes/settingRoutes');
+const customerRoutes = require('./routes/customerRoutes');
+const expenseRoutes = require('./routes/expenseRoutes');
+const loanRoutes = require('./routes/loanRoutes');
+const staffRoutes = require('./routes/staffRoutes');
+
 
 const app = express();
 
@@ -23,6 +31,14 @@ app.use('/api/suppliers', protect, supplierRoutes);
 app.use('/api/categories', protect, categoryRoutes);
 app.use('/api/warehouses', protect, warehouseRoutes);
 app.use('/api/supplier-invoices', protect, supplierInvoiceRoutes);
+app.use('/api/products', protect, productRoutes);
+app.use('/api/sales', protect, saleRoutes);
+app.use('/api/settings', protect, settingRoutes);
+app.use('/api/customers', protect, customerRoutes);
+app.use('/api/expenses', protect, expenseRoutes);
+app.use('/api/loans', protect, loanRoutes);
+app.use('/api/staff', protect, staffRoutes);
+
 
 // Health check route
 app.get('/health', (req, res) => {

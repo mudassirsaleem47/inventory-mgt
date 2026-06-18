@@ -15,6 +15,7 @@ import {
   DialogActions,
   Divider,
   Chip,
+  Snackbar,
 } from '@mui/material';
 import {
   Add as AddIcon,
@@ -298,9 +299,7 @@ const Warehouse = () => {
           </Button>
         )}
       </Box>
-
       {error && <Alert severity="error">{error}</Alert>}
-      {successMsg && <Alert severity="success">{successMsg}</Alert>}
 
       {/* Content */}
       {view === 'list' ? (
@@ -505,6 +504,18 @@ const Warehouse = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      {/* Global Warehouse Notifications */}
+      <Snackbar
+        open={!!successMsg}
+        autoHideDuration={4000}
+        onClose={() => setSuccessMsg('')}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      >
+        <Alert onClose={() => setSuccessMsg('')} severity="success" variant="filled" sx={{ width: '100%', borderRadius: 2 }}>
+          {successMsg}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

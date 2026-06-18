@@ -33,7 +33,7 @@ import {
   BarChart as ReportsIcon,
   AccountBalanceWallet as ExpensesIcon
 } from '@mui/icons-material';
-import logoImg from '../assets/2003830.jpg';
+import logoImg from '../assets/stocksherelogo.png';
 
 
 const Sidebar = ({ isOpen, toggleSidebar, isMobile, isCollapsed }) => {
@@ -42,6 +42,7 @@ const Sidebar = ({ isOpen, toggleSidebar, isMobile, isCollapsed }) => {
 
   const sidebarItems = [
     { label: 'Dashboard', path: '/dashboard', icon: DashboardIcon },
+    { label: 'POS (Cashier)', path: '/pos', icon: ShoppingCartIcon },
     { label: 'Suppliers', path: '/suppliers', icon: SuppliersIcon },
     { label: 'Categories', path: '/categories', icon: CategoriesIcon },
     { label: 'Warehouse', path: '/warehouse', icon: WarehouseIcon },
@@ -170,7 +171,7 @@ const Sidebar = ({ isOpen, toggleSidebar, isMobile, isCollapsed }) => {
                   <ListItemText
                     primary={item.label}
                     primaryTypographyProps={{
-                      fontSize: '0.85rem',
+                      fontSize: '16px',
                       fontWeight: active ? 600 : 500,
                       fontFamily: '"Inter", sans-serif',
                       color: 'inherit'

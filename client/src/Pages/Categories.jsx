@@ -14,6 +14,7 @@ import {
   DialogContent,
   DialogActions,
   Divider,
+  Snackbar,
 } from '@mui/material';
 import { Add as AddIcon, ArrowBack as ArrowBackIcon, Delete as DeleteIcon, Edit as EditIcon } from '@mui/icons-material';
 import DataTable from '../Components/DataTable';
@@ -226,9 +227,7 @@ const Categories = () => {
           </Button>
         )}
       </Box>
-
       {error && <Alert severity="error">{error}</Alert>}
-      {successMsg && <Alert severity="success">{successMsg}</Alert>}
 
       {/* Content */}
       {view === 'list' ? (
@@ -342,6 +341,18 @@ const Categories = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      {/* Global Category Notifications */}
+      <Snackbar
+        open={!!successMsg}
+        autoHideDuration={4000}
+        onClose={() => setSuccessMsg('')}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      >
+        <Alert onClose={() => setSuccessMsg('')} severity="success" variant="filled" sx={{ width: '100%', borderRadius: 2 }}>
+          {successMsg}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

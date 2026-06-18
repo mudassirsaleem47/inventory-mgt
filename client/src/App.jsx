@@ -10,7 +10,18 @@ import Warehouse from './Pages/Warehouse';
 import SuppliersInvoice from './Pages/SuppliersInvoice';
 import Login from './Pages/Login';
 import Register from './Pages/Register';
-
+import Products from './Pages/Products.jsx';
+import POS from './Pages/POS.jsx';
+import ExpiredProducts from './Pages/ExpiredProducts.jsx';
+import DeadStock from './Pages/DeadStock.jsx';
+import Setting from './Pages/Setting.jsx';
+import Transaction from './Pages/Transaction.jsx';
+import Customers from './Pages/Customers.jsx';
+import Expenses from './Pages/Expenses.jsx';
+import Loan from './Pages/Loan.jsx';
+import Staff from './Pages/Staff.jsx';
+import Reports from './Pages/Reports.jsx';
+import Documentation from './Pages/Documentation.jsx';
 // Define a decent, flat theme with Inter font
 const theme = createTheme({
   typography: {
@@ -92,22 +103,23 @@ const App = () => {
           <Route path="/" element={<DashboardLayout />}>
             <Route index element={<Navigate to="/dashboard" replace />} />
             <Route path="dashboard" element={<DashboardOverview />} />
-            <Route path="products" element={<PlaceholderPage />} />
-            <Route path="expired-products" element={<PlaceholderPage />} />
-            <Route path="dead-stock" element={<PlaceholderPage />} />
+            <Route path="products" element={<Products />} />
+            <Route path="pos" element={<POS />} />
+            <Route path="expired-products" element={<ExpiredProducts />} />
+            <Route path="dead-stock" element={<DeadStock />} />
             <Route path="categories" element={<Categories />} />
             <Route path="warehouse" element={<Warehouse />} />
             <Route path="suppliers" element={<Suppliers />} />
             <Route path="suppliers-invoice" element={<SuppliersInvoice />} />
-            <Route path="customers" element={<PlaceholderPage />} />
-            <Route path="invoice" element={<PlaceholderPage />} />
-            <Route path="transaction" element={<PlaceholderPage />} />
-            <Route path="expenses" element={<PlaceholderPage />} />
-            <Route path="loan" element={<PlaceholderPage />} />
-            <Route path="staff" element={<PlaceholderPage />} />
-            <Route path="reports" element={<PlaceholderPage />} />
-            <Route path="setting" element={<Navigate to="/dashboard" replace />} />
-            <Route path="documentation" element={<PlaceholderPage />} />
+            <Route path="customers" element={<Customers />} />
+            <Route path="invoice" element={<Transaction />} />
+            <Route path="transaction" element={<Transaction />} />
+            <Route path="expenses" element={<Expenses />} />
+            <Route path="loan" element={<Loan />} />
+            <Route path="staff" element={<Staff />} />
+            <Route path="reports" element={<Reports />} />
+            <Route path="setting" element={<Setting />} />
+            <Route path="documentation" element={<Documentation />} />
             {/* Catch all */}
             <Route path="*" element={<Navigate to="/dashboard" replace />} />
           </Route>

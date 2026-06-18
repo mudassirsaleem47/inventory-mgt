@@ -36,7 +36,7 @@ const getProductByBarcode = async (req, res) => {
 // @route POST /api/products
 const createProduct = async (req, res) => {
   try {
-    const { name, barcode, price, stock, unit, categoryId } = req.body;
+    const { name, barcode, price, stock, unit, categoryId, expiryDate } = req.body;
     if (!name || !barcode) {
       return res.status(400).json({ message: 'Name and barcode are required' });
     }
@@ -47,6 +47,7 @@ const createProduct = async (req, res) => {
         price: parseFloat(price) || 0,
         stock: parseFloat(stock) || 0,
         unit: unit || 'pcs',
+        expiryDate: expiryDate ? new Date(expiryDate) : null,
         categoryId: categoryId || null,
       },
       include: { category: { select: { id: true, name: true } } }
@@ -64,7 +65,7 @@ const createProduct = async (req, res) => {
 const updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, barcode, price, stock, unit, categoryId } = req.body;
+    const { name, barcode, price, stock, unit, categoryId, expiryDate } = req.body;
     const existing = await prisma.product.findUnique({ where: { id } });
     if (!existing) return res.status(404).json({ message: 'Product not found' });
     const product = await prisma.product.update({
@@ -75,6 +76,7 @@ const updateProduct = async (req, res) => {
         price: parseFloat(price) || 0,
         stock: parseFloat(stock) || 0,
         unit: unit || 'pcs',
+        expiryDate: expiryDate ? new Date(expiryDate) : null,
         categoryId: categoryId || null,
       },
       include: { category: { select: { id: true, name: true } } }

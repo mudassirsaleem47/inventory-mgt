@@ -15,7 +15,8 @@ import {
   DialogContent,
   DialogActions,
   Divider,
-  Grid
+  Grid,
+  Snackbar,
 } from '@mui/material';
 import { Add as AddIcon, ArrowBack as ArrowBackIcon, Delete as DeleteIcon, Edit as EditIcon, Visibility as VisibilityIcon } from '@mui/icons-material';
 import DataTable from '../Components/DataTable';
@@ -318,9 +319,7 @@ const Suppliers = () => {
           </Button>
         )}
       </Box>
-
       {error && <Alert severity="error">{error}</Alert>}
-      {successMsg && <Alert severity="success">{successMsg}</Alert>}
 
       {/* View Content */}
       {view === 'list' ? (
@@ -555,6 +554,18 @@ const Suppliers = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      {/* Global Supplier Notifications */}
+      <Snackbar
+        open={!!successMsg}
+        autoHideDuration={4000}
+        onClose={() => setSuccessMsg('')}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      >
+        <Alert onClose={() => setSuccessMsg('')} severity="success" variant="filled" sx={{ width: '100%', borderRadius: 2 }}>
+          {successMsg}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };
