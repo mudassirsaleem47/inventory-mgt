@@ -44,7 +44,16 @@ const Login = () => {
         body: JSON.stringify(formData)
       });
 
-      const data = await response.json();
+      let data;
+      const contentType = response.headers.get('content-type');
+      if (contentType && contentType.includes('application/json')) {
+        data = await response.json();
+      } else {
+        const errorText = await response.text();
+        console.error('Server non-JSON response:', errorText);
+        throw new Error(`Server Error (non-JSON): ${errorText.substring(0, 150)}`);
+      }
+
       if (!response.ok) {
         throw new Error(data.message || 'Login failed');
       }
