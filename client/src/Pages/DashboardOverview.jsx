@@ -72,52 +72,31 @@ const DashboardOverview = () => {
       const token = getToken();
       if (!token) return;
 
-      // Fetch core SQLite database tables in parallel
-      const [prodRes, salesRes, catRes, supRes, settingsRes, invoiceRes, expenseRes, loanRes] = await Promise.all([
-        fetch(`${API_URL}/api/products`, { headers: { 'Authorization': `Bearer ${token}` } }),
-        fetch(`${API_URL}/api/sales`, { headers: { 'Authorization': `Bearer ${token}` } }),
-        fetch(`${API_URL}/api/categories`, { headers: { 'Authorization': `Bearer ${token}` } }),
-        fetch(`${API_URL}/api/suppliers`, { headers: { 'Authorization': `Bearer ${token}` } }),
-        fetch(`${API_URL}/api/settings`, { headers: { 'Authorization': `Bearer ${token}` } }),
-        fetch(`${API_URL}/api/supplier-invoices`, { headers: { 'Authorization': `Bearer ${token}` } }),
-        fetch(`${API_URL}/api/expenses`, { headers: { 'Authorization': `Bearer ${token}` } }),
-        fetch(`${API_URL}/api/loans`, { headers: { 'Authorization': `Bearer ${token}` } })
-      ]);
+      // Fetch consolidated dashboard statistics in a single HTTP request
+      const response = await fetch(`${API_URL}/api/dashboard/stats`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
 
-      if (
-        prodRes.status === 401 ||
-        salesRes.status === 401 ||
-        catRes.status === 401 ||
-        expenseRes.status === 401 ||
-        loanRes.status === 401
-      ) {
+      if (response.status === 401 || response.status === 403) {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         navigate('/login');
         return;
       }
 
-      const prodData = await prodRes.json();
-      const salesData = await salesRes.json();
-      const catData = await catRes.json();
-      const supData = await supRes.json();
-      const invoiceData = invoiceRes.ok ? await invoiceRes.json() : [];
-      const expenseData = expenseRes.ok ? await expenseRes.json() : [];
-      const loanData = loanRes.ok ? await loanRes.json() : [];
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || 'Failed to fetch dashboard metrics');
 
-      setProducts(Array.isArray(prodData) ? prodData : []);
-      setSales(Array.isArray(salesData) ? salesData : []);
-      setCategories(Array.isArray(catData) ? catData : []);
-      setSuppliers(Array.isArray(supData) ? supData : []);
-      setSupplierInvoices(Array.isArray(invoiceData) ? invoiceData : []);
-      setExpenses(Array.isArray(expenseData) ? expenseData : []);
-      setLoans(Array.isArray(loanData) ? loanData : []);
+      setProducts(Array.isArray(data.products) ? data.products : []);
+      setSales(Array.isArray(data.sales) ? data.sales : []);
+      setCategories(Array.isArray(data.categories) ? data.categories : []);
+      setSuppliers(Array.isArray(data.suppliers) ? data.suppliers : []);
+      setSupplierInvoices(Array.isArray(data.supplierInvoices) ? data.supplierInvoices : []);
+      setExpenses(Array.isArray(data.expenses) ? data.expenses : []);
+      setLoans(Array.isArray(data.loans) ? data.loans : []);
 
-      if (settingsRes.ok) {
-        const settingsData = await settingsRes.json();
-        if (settingsData && settingsData.currency) {
-          setCurrency(settingsData.currency);
-        }
+      if (data.settings && data.settings.currency) {
+        setCurrency(data.settings.currency);
       }
 
     } catch (err) {
