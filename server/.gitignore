@@ -1,0 +1,15 @@
+# Dependencies
+node_modules/
+
+# Environment variables
+.env
+
+# Local SQLite databases
+prisma/dev.db
+prisma/dev.db-journal
+
+# Uploaded assets
+uploads/
+
+# Generated Prisma Client
+src/generated/
