@@ -178,6 +178,15 @@ exports.Prisma.ProductScalarFieldEnum = {
   unit: 'unit',
   expiryDate: 'expiryDate',
   categoryId: 'categoryId',
+  warehouseId: 'warehouseId',
+  rackNo: 'rackNo',
+  imagePath: 'imagePath',
+  detail: 'detail',
+  mfgDate: 'mfgDate',
+  lowStockAlert: 'lowStockAlert',
+  supplierPrice: 'supplierPrice',
+  model: 'model',
+  supplierId: 'supplierId',
   createdAt: 'createdAt'
 };
 

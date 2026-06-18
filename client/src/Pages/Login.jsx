@@ -50,7 +50,7 @@ const Login = () => {
       }
 
       localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(data.user));
+      localStorage.setItem('user', JSON.stringify({ id: data.id, name: data.name, email: data.email }));
 
       navigate('/dashboard');
     } catch (err) {
@@ -112,18 +112,20 @@ const Login = () => {
                 size="small"
                 value={formData.password}
                 onChange={handleChange}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        onClick={() => setShowPassword(!showPassword)}
-                        edge="end"
-                        size="small"
-                      >
-                        {showPassword ? <VisibilityOff sx={{ fontSize: 20 }} /> : <Visibility sx={{ fontSize: 20 }} />}
-                      </IconButton>
-                    </InputAdornment>
-                  )
+                slotProps={{
+                  input: {
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() => setShowPassword(!showPassword)}
+                          edge="end"
+                          size="small"
+                        >
+                          {showPassword ? <VisibilityOff sx={{ fontSize: 20 }} /> : <Visibility sx={{ fontSize: 20 }} />}
+                        </IconButton>
+                      </InputAdornment>
+                    )
+                  }
                 }}
               />
 

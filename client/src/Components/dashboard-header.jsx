@@ -163,12 +163,14 @@ const DashboardHeader = ({ onMenuClick, onCollapseToggle, isCollapsed }) => {
           <TextField
             size="small"
             placeholder="Search..."
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon fontSize="small" sx={{ color: 'text.secondary' }} />
-                </InputAdornment>
-              ),
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon fontSize="small" sx={{ color: 'text.secondary' }} />
+                  </InputAdornment>
+                ),
+              }
             }}
             sx={{
               width: 200,

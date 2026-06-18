@@ -671,7 +671,7 @@ const SuppliersInvoice = () => {
                     value={r.value}
                     disabled
                     fullWidth
-                    InputProps={{ disableUnderline: true, sx: { fontSize: '0.85rem', fontWeight: 700 } }}
+                    slotProps={{ input: { disableUnderline: true, sx: { fontSize: '0.85rem', fontWeight: 700 } } }}
                   />
                 </Box>
               </Box>
@@ -685,12 +685,14 @@ const SuppliersInvoice = () => {
                 <TextField
                   variant="standard"
                   type="number"
-                  inputProps={{ min: 0, step: 'any' }}
                   value={formData.paidAmount}
                   onChange={(e) => setFormData(f => ({ ...f, paidAmount: e.target.value }))}
                   fullWidth
                   placeholder="0.00"
-                  InputProps={{ disableUnderline: true, sx: { fontSize: '0.85rem' } }}
+                  slotProps={{
+                    htmlInput: { min: 0, step: 'any' },
+                    input: { disableUnderline: true, sx: { fontSize: '0.85rem' } }
+                  }}
                 />
               </Box>
             </Box>
@@ -705,7 +707,7 @@ const SuppliersInvoice = () => {
                   value={due.toFixed(2)}
                   disabled
                   fullWidth
-                  InputProps={{ disableUnderline: true, sx: { fontSize: '0.85rem', fontWeight: 700, color: due > 0 ? '#b91c1c' : '#15803d' } }}
+                  slotProps={{ input: { disableUnderline: true, sx: { fontSize: '0.85rem', fontWeight: 700, color: due > 0 ? '#b91c1c' : '#15803d' } } }}
                 />
               </Box>
             </Box>

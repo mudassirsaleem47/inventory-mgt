@@ -57,7 +57,7 @@ const DataTable = ({
   data = [],
   loading = false,
   selected = [],
-  onSelectedChange = () => {},
+  onSelectedChange = () => { },
   bulkActions = [],
   searchPlaceholder = 'Search...'
 }) => {
@@ -294,30 +294,28 @@ const DataTable = ({
             size="small"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            InputProps={{
-              disableUnderline: true,
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon sx={{ color: '#94a3b8', fontSize: 20 }} />
-                </InputAdornment>
-              ),
-              endAdornment: searchQuery && (
-                <InputAdornment position="end">
-                  <IconButton onClick={() => setSearchQuery('')} size="small">
-                    <ClearIcon sx={{ fontSize: 16 }} />
-                  </IconButton>
-                </InputAdornment>
-              ),
-              sx: {
-                bgcolor: '#f1f5f9',
-                borderRadius: 2,
-                px: 1.5,
-                py: 0.5,
-                fontSize: '0.85rem',
-                width: { xs: '100%', sm: 260 },
-                border: '1px solid #e2e8f0',
-                '&:hover': {
-                  borderColor: '#cbd5e1'
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon sx={{ color: '#94a3b8', fontSize: 20 }} />
+                  </InputAdornment>
+                ),
+                endAdornment: searchQuery && (
+                  <InputAdornment position="end">
+                    <IconButton onClick={() => setSearchQuery('')} size="small">
+                      <ClearIcon sx={{ fontSize: 16 }} />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+                sx: {
+                  px: 1.5,
+                  py: 0.5,
+                  fontSize: '0.85rem',
+                  width: { xs: '100%', sm: 260 },
+                  '&:hover': {
+                    borderColor: '#cbd5e1'
+                  }
                 }
               }
             }}

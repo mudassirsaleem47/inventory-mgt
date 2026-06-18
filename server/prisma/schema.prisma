@@ -42,6 +42,7 @@ model Supplier {
   address       String?
   createdAt     DateTime          @default(now())
   invoices      SupplierInvoice[]
+  products      Product[]
 }
 
 model Category {
@@ -61,20 +62,32 @@ model Warehouse {
   phone     String?
   createdAt DateTime          @default(now())
   invoices  SupplierInvoice[]
+  products  Product[]
 }
 
 model Product {
-  id         String     @id @default(uuid())
-  name       String
-  barcode    String     @unique
-  price      Float      @default(0)
-  stock      Float      @default(0)
-  unit       String     @default("pcs")
-  expiryDate DateTime?
-  categoryId String?
-  category   Category?  @relation(fields: [categoryId], references: [id])
-  createdAt  DateTime   @default(now())
-  saleItems  SaleItem[]
+  id             String           @id @default(uuid())
+  name           String
+  barcode        String           @unique
+  price          Float            @default(0)
+  stock          Float            @default(0)
+  unit           String           @default("pcs")
+  expiryDate     DateTime?
+  categoryId     String?
+  category       Category?        @relation(fields: [categoryId], references: [id])
+  warehouseId    String?
+  warehouse      Warehouse?       @relation(fields: [warehouseId], references: [id])
+  rackNo         String?
+  imagePath      String?
+  detail         String?
+  mfgDate        DateTime?
+  lowStockAlert  Float?           @default(5)
+  supplierPrice  Float?           @default(0)
+  model          String?
+  supplierId     String?
+  supplier       Supplier?        @relation(fields: [supplierId], references: [id])
+  createdAt      DateTime         @default(now())
+  saleItems      SaleItem[]
 }
 
 model SaleTransaction {

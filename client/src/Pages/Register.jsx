@@ -124,18 +124,20 @@ const Register = () => {
                 size="small"
                 value={formData.password}
                 onChange={handleChange}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        onClick={() => setShowPassword(!showPassword)}
-                        edge="end"
-                        size="small"
-                      >
-                        {showPassword ? <VisibilityOff sx={{ fontSize: 20 }} /> : <Visibility sx={{ fontSize: 20 }} />}
-                      </IconButton>
-                    </InputAdornment>
-                  )
+                slotProps={{
+                  input: {
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() => setShowPassword(!showPassword)}
+                          edge="end"
+                          size="small"
+                        >
+                          {showPassword ? <VisibilityOff sx={{ fontSize: 20 }} /> : <Visibility sx={{ fontSize: 20 }} />}
+                        </IconButton>
+                      </InputAdornment>
+                    )
+                  }
                 }}
               />
 

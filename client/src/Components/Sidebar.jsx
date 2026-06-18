@@ -43,11 +43,11 @@ const Sidebar = ({ isOpen, toggleSidebar, isMobile, isCollapsed }) => {
   const sidebarItems = [
     { label: 'Dashboard', path: '/dashboard', icon: DashboardIcon },
     { label: 'POS (Cashier)', path: '/pos', icon: ShoppingCartIcon },
-    { label: 'Suppliers', path: '/suppliers', icon: SuppliersIcon },
+    { label: 'Products', path: '/products', icon: ProductsIcon },
     { label: 'Categories', path: '/categories', icon: CategoriesIcon },
+    { label: 'Suppliers', path: '/suppliers', icon: SuppliersIcon },
     { label: 'Warehouse', path: '/warehouse', icon: WarehouseIcon },
     { label: 'Suppliers Invoice', path: '/suppliers-invoice', icon: SuppliersInvoiceIcon },
-    { label: 'Products', path: '/products', icon: ProductsIcon },
     { label: 'Expired Products', path: '/expired-products', icon: ExpiredProductsIcon },
     { label: 'Dead Stock', path: '/dead-stock', icon: DeadStockIcon },
     { label: 'Customers', path: '/customers', icon: CustomersIcon },

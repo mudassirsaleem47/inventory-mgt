@@ -11,6 +11,8 @@ import SuppliersInvoice from './Pages/SuppliersInvoice';
 import Login from './Pages/Login';
 import Register from './Pages/Register';
 import Products from './Pages/Products.jsx';
+import AddProduct from './Pages/AddProduct.jsx';
+import EditProduct from './Pages/EditProduct.jsx';
 import POS from './Pages/POS.jsx';
 import ExpiredProducts from './Pages/ExpiredProducts.jsx';
 import DeadStock from './Pages/DeadStock.jsx';
@@ -104,6 +106,8 @@ const App = () => {
             <Route index element={<Navigate to="/dashboard" replace />} />
             <Route path="dashboard" element={<DashboardOverview />} />
             <Route path="products" element={<Products />} />
+            <Route path="products/add" element={<AddProduct />} />
+            <Route path="products/edit/:id" element={<EditProduct />} />
             <Route path="pos" element={<POS />} />
             <Route path="expired-products" element={<ExpiredProducts />} />
             <Route path="dead-stock" element={<DeadStock />} />

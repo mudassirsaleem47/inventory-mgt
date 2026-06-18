@@ -1,4 +1,6 @@
 const prisma = require('../../lib/prisma');
+const path = require('path');
+const fs = require('fs');
 
 // @desc  Get all products
 // @route GET /api/products
@@ -36,10 +38,30 @@ const getProductByBarcode = async (req, res) => {
 // @route POST /api/products
 const createProduct = async (req, res) => {
   try {
-    const { name, barcode, price, stock, unit, categoryId, expiryDate } = req.body;
+    const {
+      name,
+      barcode,
+      price,
+      stock,
+      unit,
+      categoryId,
+      expiryDate,
+      warehouseId,
+      rackNo,
+      detail,
+      mfgDate,
+      lowStockAlert,
+      supplierPrice,
+      model,
+      supplierId
+    } = req.body;
+
     if (!name || !barcode) {
       return res.status(400).json({ message: 'Name and barcode are required' });
     }
+
+    const imagePath = req.file ? `uploads/products/${req.file.filename}` : null;
+
     const product = await prisma.product.create({
       data: {
         name,
@@ -49,8 +71,21 @@ const createProduct = async (req, res) => {
         unit: unit || 'pcs',
         expiryDate: expiryDate ? new Date(expiryDate) : null,
         categoryId: categoryId || null,
+        warehouseId: warehouseId || null,
+        rackNo: rackNo || null,
+        imagePath,
+        detail: detail || null,
+        mfgDate: mfgDate ? new Date(mfgDate) : null,
+        lowStockAlert: lowStockAlert ? parseFloat(lowStockAlert) : 5,
+        supplierPrice: supplierPrice ? parseFloat(supplierPrice) : 0,
+        model: model || null,
+        supplierId: supplierId || null,
       },
-      include: { category: { select: { id: true, name: true } } }
+      include: {
+        category: { select: { id: true, name: true } },
+        warehouse: { select: { id: true, name: true } },
+        supplier: { select: { id: true, name: true } }
+      }
     });
     return res.status(201).json(product);
   } catch (error) {
@@ -65,9 +100,37 @@ const createProduct = async (req, res) => {
 const updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, barcode, price, stock, unit, categoryId, expiryDate } = req.body;
+    const {
+      name,
+      barcode,
+      price,
+      stock,
+      unit,
+      categoryId,
+      expiryDate,
+      warehouseId,
+      rackNo,
+      detail,
+      mfgDate,
+      lowStockAlert,
+      supplierPrice,
+      model,
+      supplierId
+    } = req.body;
+
     const existing = await prisma.product.findUnique({ where: { id } });
     if (!existing) return res.status(404).json({ message: 'Product not found' });
+
+    let imagePath = existing.imagePath;
+    if (req.file) {
+      // Delete old image if exists
+      if (existing.imagePath) {
+        const oldPath = path.join(__dirname, '../../', existing.imagePath);
+        if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
+      }
+      imagePath = `uploads/products/${req.file.filename}`;
+    }
+
     const product = await prisma.product.update({
       where: { id },
       data: {
@@ -78,8 +141,21 @@ const updateProduct = async (req, res) => {
         unit: unit || 'pcs',
         expiryDate: expiryDate ? new Date(expiryDate) : null,
         categoryId: categoryId || null,
+        warehouseId: warehouseId || null,
+        rackNo: rackNo || null,
+        imagePath,
+        detail: detail || null,
+        mfgDate: mfgDate ? new Date(mfgDate) : null,
+        lowStockAlert: lowStockAlert ? parseFloat(lowStockAlert) : 5,
+        supplierPrice: supplierPrice ? parseFloat(supplierPrice) : 0,
+        model: model || null,
+        supplierId: supplierId || null,
       },
-      include: { category: { select: { id: true, name: true } } }
+      include: {
+        category: { select: { id: true, name: true } },
+        warehouse: { select: { id: true, name: true } },
+        supplier: { select: { id: true, name: true } }
+      }
     });
     return res.status(200).json(product);
   } catch (error) {
@@ -97,6 +173,21 @@ const deleteProducts = async (req, res) => {
     if (!ids || !Array.isArray(ids) || ids.length === 0) {
       return res.status(400).json({ message: 'Product IDs are required' });
     }
+
+    // Find products to delete their images
+    const products = await prisma.product.findMany({
+      where: { id: { in: ids } }
+    });
+
+    products.forEach(p => {
+      if (p.imagePath) {
+        const imgPath = path.join(__dirname, '../../', p.imagePath);
+        if (fs.existsSync(imgPath)) {
+          fs.unlinkSync(imgPath);
+        }
+      }
+    });
+
     await prisma.product.deleteMany({ where: { id: { in: ids } } });
     return res.status(200).json({ message: 'Products deleted successfully' });
   } catch (error) {
@@ -105,4 +196,116 @@ const deleteProducts = async (req, res) => {
   }
 };
 
-module.exports = { getProducts, getProductByBarcode, createProduct, updateProduct, deleteProducts };
+// @desc  Get product by ID
+// @route GET /api/products/:id
+const getProductById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const product = await prisma.product.findUnique({
+      where: { id },
+      include: {
+        category: { select: { id: true, name: true } },
+        warehouse: { select: { id: true, name: true } },
+        supplier: { select: { id: true, name: true } }
+      }
+    });
+    if (!product) return res.status(404).json({ message: 'Product not found' });
+    return res.status(200).json(product);
+  } catch (error) {
+    console.error('Get product by ID error:', error);
+    return res.status(500).json({ message: 'Server error' });
+  }
+};
+
+// @desc  Bulk import products
+// @route POST /api/products/import
+const importProducts = async (req, res) => {
+  try {
+    const { products } = req.body;
+    if (!products || !Array.isArray(products)) {
+      return res.status(400).json({ message: 'Invalid products list' });
+    }
+
+    let successCount = 0;
+    let skippedCount = 0;
+    const errors = [];
+
+    for (let i = 0; i < products.length; i++) {
+      const item = products[i];
+      try {
+        if (!item.name || !item.name.trim()) {
+          skippedCount++;
+          errors.push(`Row ${i + 1}: Name is required`);
+          continue;
+        }
+
+        // Sell Price is required
+        const priceVal = parseFloat(item.price);
+        if (isNaN(priceVal)) {
+          skippedCount++;
+          errors.push(`Row ${i + 1} (${item.name}): Sell Price is required`);
+          continue;
+        }
+
+        // Handle barcode
+        let barcodeVal = item.barcode ? String(item.barcode).trim() : '';
+        if (!barcodeVal) {
+          // Auto-generate barcode
+          let isUnique = false;
+          let generated = '';
+          let limit = 0;
+          while (!isUnique && limit < 10) {
+            generated = '890' + Math.floor(100000000 + Math.random() * 900000000);
+            const check = await prisma.product.findUnique({ where: { barcode: generated } });
+            if (!check) isUnique = true;
+            limit++;
+          }
+          barcodeVal = generated;
+        } else {
+          // Check uniqueness of provided barcode
+          const check = await prisma.product.findUnique({ where: { barcode: barcodeVal } });
+          if (check) {
+            skippedCount++;
+            errors.push(`Row ${i + 1} (${item.name}): Barcode ${barcodeVal} already exists`);
+            continue;
+          }
+        }
+
+        // Create product
+        await prisma.product.create({
+          data: {
+            name: item.name.trim(),
+            barcode: barcodeVal,
+            price: priceVal,
+            stock: parseFloat(item.stock) || 0,
+            unit: item.unit ? String(item.unit).trim() : 'pcs',
+            expiryDate: item.expiryDate && !isNaN(Date.parse(item.expiryDate)) ? new Date(item.expiryDate) : null,
+            rackNo: item.rackNo ? String(item.rackNo).trim() : null,
+            detail: item.detail ? String(item.detail).trim() : null,
+            mfgDate: item.mfgDate && !isNaN(Date.parse(item.mfgDate)) ? new Date(item.mfgDate) : null,
+            lowStockAlert: item.lowStockAlert ? parseFloat(item.lowStockAlert) : 5,
+            supplierPrice: item.supplierPrice ? parseFloat(item.supplierPrice) : 0,
+            model: item.model ? String(item.model).trim() : null,
+          }
+        });
+        successCount++;
+      } catch (err) {
+        console.error(`Error importing row ${i + 1}:`, err);
+        skippedCount++;
+        errors.push(`Row ${i + 1} (${item.name || 'Unknown'}): ${err.message || 'Database error'}`);
+      }
+    }
+
+    return res.status(200).json({
+      message: 'Bulk import complete',
+      successCount,
+      skippedCount,
+      errors
+    });
+  } catch (error) {
+    console.error('Bulk import error:', error);
+    return res.status(500).json({ message: 'Server error during import' });
+  }
+};
+
+module.exports = { getProducts, getProductByBarcode, createProduct, updateProduct, deleteProducts, getProductById, importProducts };

@@ -2045,10 +2045,12 @@ export namespace Prisma {
 
   export type SupplierCountOutputType = {
     invoices: number
+    products: number
   }
 
   export type SupplierCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     invoices?: boolean | SupplierCountOutputTypeCountInvoicesArgs
+    products?: boolean | SupplierCountOutputTypeCountProductsArgs
   }
 
   // Custom InputTypes
@@ -2067,6 +2069,13 @@ export namespace Prisma {
    */
   export type SupplierCountOutputTypeCountInvoicesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: SupplierInvoiceWhereInput
+  }
+
+  /**
+   * SupplierCountOutputType without action
+   */
+  export type SupplierCountOutputTypeCountProductsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProductWhereInput
   }
 
 
@@ -2107,10 +2116,12 @@ export namespace Prisma {
 
   export type WarehouseCountOutputType = {
     invoices: number
+    products: number
   }
 
   export type WarehouseCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     invoices?: boolean | WarehouseCountOutputTypeCountInvoicesArgs
+    products?: boolean | WarehouseCountOutputTypeCountProductsArgs
   }
 
   // Custom InputTypes
@@ -2129,6 +2140,13 @@ export namespace Prisma {
    */
   export type WarehouseCountOutputTypeCountInvoicesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: SupplierInvoiceWhereInput
+  }
+
+  /**
+   * WarehouseCountOutputType without action
+   */
+  export type WarehouseCountOutputTypeCountProductsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProductWhereInput
   }
 
 
@@ -4499,6 +4517,7 @@ export namespace Prisma {
     address?: boolean
     createdAt?: boolean
     invoices?: boolean | Supplier$invoicesArgs<ExtArgs>
+    products?: boolean | Supplier$productsArgs<ExtArgs>
     _count?: boolean | SupplierCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["supplier"]>
 
@@ -4535,6 +4554,7 @@ export namespace Prisma {
   export type SupplierOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "contactPerson" | "email" | "phone" | "address" | "createdAt", ExtArgs["result"]["supplier"]>
   export type SupplierInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     invoices?: boolean | Supplier$invoicesArgs<ExtArgs>
+    products?: boolean | Supplier$productsArgs<ExtArgs>
     _count?: boolean | SupplierCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type SupplierIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -4544,6 +4564,7 @@ export namespace Prisma {
     name: "Supplier"
     objects: {
       invoices: Prisma.$SupplierInvoicePayload<ExtArgs>[]
+      products: Prisma.$ProductPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -4948,6 +4969,7 @@ export namespace Prisma {
   export interface Prisma__SupplierClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     invoices<T extends Supplier$invoicesArgs<ExtArgs> = {}>(args?: Subset<T, Supplier$invoicesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupplierInvoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    products<T extends Supplier$productsArgs<ExtArgs> = {}>(args?: Subset<T, Supplier$productsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5393,6 +5415,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: SupplierInvoiceScalarFieldEnum | SupplierInvoiceScalarFieldEnum[]
+  }
+
+  /**
+   * Supplier.products
+   */
+  export type Supplier$productsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Product
+     */
+    select?: ProductSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Product
+     */
+    omit?: ProductOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductInclude<ExtArgs> | null
+    where?: ProductWhereInput
+    orderBy?: ProductOrderByWithRelationInput | ProductOrderByWithRelationInput[]
+    cursor?: ProductWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProductScalarFieldEnum | ProductScalarFieldEnum[]
   }
 
   /**
@@ -6686,6 +6732,7 @@ export namespace Prisma {
     phone?: boolean
     createdAt?: boolean
     invoices?: boolean | Warehouse$invoicesArgs<ExtArgs>
+    products?: boolean | Warehouse$productsArgs<ExtArgs>
     _count?: boolean | WarehouseCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["warehouse"]>
 
@@ -6722,6 +6769,7 @@ export namespace Prisma {
   export type WarehouseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "location" | "capacity" | "manager" | "phone" | "createdAt", ExtArgs["result"]["warehouse"]>
   export type WarehouseInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     invoices?: boolean | Warehouse$invoicesArgs<ExtArgs>
+    products?: boolean | Warehouse$productsArgs<ExtArgs>
     _count?: boolean | WarehouseCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type WarehouseIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -6731,6 +6779,7 @@ export namespace Prisma {
     name: "Warehouse"
     objects: {
       invoices: Prisma.$SupplierInvoicePayload<ExtArgs>[]
+      products: Prisma.$ProductPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -7135,6 +7184,7 @@ export namespace Prisma {
   export interface Prisma__WarehouseClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     invoices<T extends Warehouse$invoicesArgs<ExtArgs> = {}>(args?: Subset<T, Warehouse$invoicesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupplierInvoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    products<T extends Warehouse$productsArgs<ExtArgs> = {}>(args?: Subset<T, Warehouse$productsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7583,6 +7633,30 @@ export namespace Prisma {
   }
 
   /**
+   * Warehouse.products
+   */
+  export type Warehouse$productsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Product
+     */
+    select?: ProductSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Product
+     */
+    omit?: ProductOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductInclude<ExtArgs> | null
+    where?: ProductWhereInput
+    orderBy?: ProductOrderByWithRelationInput | ProductOrderByWithRelationInput[]
+    cursor?: ProductWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProductScalarFieldEnum | ProductScalarFieldEnum[]
+  }
+
+  /**
    * Warehouse without action
    */
   export type WarehouseDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7616,11 +7690,15 @@ export namespace Prisma {
   export type ProductAvgAggregateOutputType = {
     price: number | null
     stock: number | null
+    lowStockAlert: number | null
+    supplierPrice: number | null
   }
 
   export type ProductSumAggregateOutputType = {
     price: number | null
     stock: number | null
+    lowStockAlert: number | null
+    supplierPrice: number | null
   }
 
   export type ProductMinAggregateOutputType = {
@@ -7632,6 +7710,15 @@ export namespace Prisma {
     unit: string | null
     expiryDate: Date | null
     categoryId: string | null
+    warehouseId: string | null
+    rackNo: string | null
+    imagePath: string | null
+    detail: string | null
+    mfgDate: Date | null
+    lowStockAlert: number | null
+    supplierPrice: number | null
+    model: string | null
+    supplierId: string | null
     createdAt: Date | null
   }
 
@@ -7644,6 +7731,15 @@ export namespace Prisma {
     unit: string | null
     expiryDate: Date | null
     categoryId: string | null
+    warehouseId: string | null
+    rackNo: string | null
+    imagePath: string | null
+    detail: string | null
+    mfgDate: Date | null
+    lowStockAlert: number | null
+    supplierPrice: number | null
+    model: string | null
+    supplierId: string | null
     createdAt: Date | null
   }
 
@@ -7656,6 +7752,15 @@ export namespace Prisma {
     unit: number
     expiryDate: number
     categoryId: number
+    warehouseId: number
+    rackNo: number
+    imagePath: number
+    detail: number
+    mfgDate: number
+    lowStockAlert: number
+    supplierPrice: number
+    model: number
+    supplierId: number
     createdAt: number
     _all: number
   }
@@ -7664,11 +7769,15 @@ export namespace Prisma {
   export type ProductAvgAggregateInputType = {
     price?: true
     stock?: true
+    lowStockAlert?: true
+    supplierPrice?: true
   }
 
   export type ProductSumAggregateInputType = {
     price?: true
     stock?: true
+    lowStockAlert?: true
+    supplierPrice?: true
   }
 
   export type ProductMinAggregateInputType = {
@@ -7680,6 +7789,15 @@ export namespace Prisma {
     unit?: true
     expiryDate?: true
     categoryId?: true
+    warehouseId?: true
+    rackNo?: true
+    imagePath?: true
+    detail?: true
+    mfgDate?: true
+    lowStockAlert?: true
+    supplierPrice?: true
+    model?: true
+    supplierId?: true
     createdAt?: true
   }
 
@@ -7692,6 +7810,15 @@ export namespace Prisma {
     unit?: true
     expiryDate?: true
     categoryId?: true
+    warehouseId?: true
+    rackNo?: true
+    imagePath?: true
+    detail?: true
+    mfgDate?: true
+    lowStockAlert?: true
+    supplierPrice?: true
+    model?: true
+    supplierId?: true
     createdAt?: true
   }
 
@@ -7704,6 +7831,15 @@ export namespace Prisma {
     unit?: true
     expiryDate?: true
     categoryId?: true
+    warehouseId?: true
+    rackNo?: true
+    imagePath?: true
+    detail?: true
+    mfgDate?: true
+    lowStockAlert?: true
+    supplierPrice?: true
+    model?: true
+    supplierId?: true
     createdAt?: true
     _all?: true
   }
@@ -7803,6 +7939,15 @@ export namespace Prisma {
     unit: string
     expiryDate: Date | null
     categoryId: string | null
+    warehouseId: string | null
+    rackNo: string | null
+    imagePath: string | null
+    detail: string | null
+    mfgDate: Date | null
+    lowStockAlert: number | null
+    supplierPrice: number | null
+    model: string | null
+    supplierId: string | null
     createdAt: Date
     _count: ProductCountAggregateOutputType | null
     _avg: ProductAvgAggregateOutputType | null
@@ -7834,8 +7979,19 @@ export namespace Prisma {
     unit?: boolean
     expiryDate?: boolean
     categoryId?: boolean
+    warehouseId?: boolean
+    rackNo?: boolean
+    imagePath?: boolean
+    detail?: boolean
+    mfgDate?: boolean
+    lowStockAlert?: boolean
+    supplierPrice?: boolean
+    model?: boolean
+    supplierId?: boolean
     createdAt?: boolean
     category?: boolean | Product$categoryArgs<ExtArgs>
+    warehouse?: boolean | Product$warehouseArgs<ExtArgs>
+    supplier?: boolean | Product$supplierArgs<ExtArgs>
     saleItems?: boolean | Product$saleItemsArgs<ExtArgs>
     _count?: boolean | ProductCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["product"]>
@@ -7849,8 +8005,19 @@ export namespace Prisma {
     unit?: boolean
     expiryDate?: boolean
     categoryId?: boolean
+    warehouseId?: boolean
+    rackNo?: boolean
+    imagePath?: boolean
+    detail?: boolean
+    mfgDate?: boolean
+    lowStockAlert?: boolean
+    supplierPrice?: boolean
+    model?: boolean
+    supplierId?: boolean
     createdAt?: boolean
     category?: boolean | Product$categoryArgs<ExtArgs>
+    warehouse?: boolean | Product$warehouseArgs<ExtArgs>
+    supplier?: boolean | Product$supplierArgs<ExtArgs>
   }, ExtArgs["result"]["product"]>
 
   export type ProductSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -7862,8 +8029,19 @@ export namespace Prisma {
     unit?: boolean
     expiryDate?: boolean
     categoryId?: boolean
+    warehouseId?: boolean
+    rackNo?: boolean
+    imagePath?: boolean
+    detail?: boolean
+    mfgDate?: boolean
+    lowStockAlert?: boolean
+    supplierPrice?: boolean
+    model?: boolean
+    supplierId?: boolean
     createdAt?: boolean
     category?: boolean | Product$categoryArgs<ExtArgs>
+    warehouse?: boolean | Product$warehouseArgs<ExtArgs>
+    supplier?: boolean | Product$supplierArgs<ExtArgs>
   }, ExtArgs["result"]["product"]>
 
   export type ProductSelectScalar = {
@@ -7875,26 +8053,43 @@ export namespace Prisma {
     unit?: boolean
     expiryDate?: boolean
     categoryId?: boolean
+    warehouseId?: boolean
+    rackNo?: boolean
+    imagePath?: boolean
+    detail?: boolean
+    mfgDate?: boolean
+    lowStockAlert?: boolean
+    supplierPrice?: boolean
+    model?: boolean
+    supplierId?: boolean
     createdAt?: boolean
   }
 
-  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "barcode" | "price" | "stock" | "unit" | "expiryDate" | "categoryId" | "createdAt", ExtArgs["result"]["product"]>
+  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "barcode" | "price" | "stock" | "unit" | "expiryDate" | "categoryId" | "warehouseId" | "rackNo" | "imagePath" | "detail" | "mfgDate" | "lowStockAlert" | "supplierPrice" | "model" | "supplierId" | "createdAt", ExtArgs["result"]["product"]>
   export type ProductInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     category?: boolean | Product$categoryArgs<ExtArgs>
+    warehouse?: boolean | Product$warehouseArgs<ExtArgs>
+    supplier?: boolean | Product$supplierArgs<ExtArgs>
     saleItems?: boolean | Product$saleItemsArgs<ExtArgs>
     _count?: boolean | ProductCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ProductIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     category?: boolean | Product$categoryArgs<ExtArgs>
+    warehouse?: boolean | Product$warehouseArgs<ExtArgs>
+    supplier?: boolean | Product$supplierArgs<ExtArgs>
   }
   export type ProductIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     category?: boolean | Product$categoryArgs<ExtArgs>
+    warehouse?: boolean | Product$warehouseArgs<ExtArgs>
+    supplier?: boolean | Product$supplierArgs<ExtArgs>
   }
 
   export type $ProductPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Product"
     objects: {
       category: Prisma.$CategoryPayload<ExtArgs> | null
+      warehouse: Prisma.$WarehousePayload<ExtArgs> | null
+      supplier: Prisma.$SupplierPayload<ExtArgs> | null
       saleItems: Prisma.$SaleItemPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -7906,6 +8101,15 @@ export namespace Prisma {
       unit: string
       expiryDate: Date | null
       categoryId: string | null
+      warehouseId: string | null
+      rackNo: string | null
+      imagePath: string | null
+      detail: string | null
+      mfgDate: Date | null
+      lowStockAlert: number | null
+      supplierPrice: number | null
+      model: string | null
+      supplierId: string | null
       createdAt: Date
     }, ExtArgs["result"]["product"]>
     composites: {}
@@ -8302,6 +8506,8 @@ export namespace Prisma {
   export interface Prisma__ProductClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     category<T extends Product$categoryArgs<ExtArgs> = {}>(args?: Subset<T, Product$categoryArgs<ExtArgs>>): Prisma__CategoryClient<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    warehouse<T extends Product$warehouseArgs<ExtArgs> = {}>(args?: Subset<T, Product$warehouseArgs<ExtArgs>>): Prisma__WarehouseClient<$Result.GetResult<Prisma.$WarehousePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    supplier<T extends Product$supplierArgs<ExtArgs> = {}>(args?: Subset<T, Product$supplierArgs<ExtArgs>>): Prisma__SupplierClient<$Result.GetResult<Prisma.$SupplierPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     saleItems<T extends Product$saleItemsArgs<ExtArgs> = {}>(args?: Subset<T, Product$saleItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SaleItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -8340,6 +8546,15 @@ export namespace Prisma {
     readonly unit: FieldRef<"Product", 'String'>
     readonly expiryDate: FieldRef<"Product", 'DateTime'>
     readonly categoryId: FieldRef<"Product", 'String'>
+    readonly warehouseId: FieldRef<"Product", 'String'>
+    readonly rackNo: FieldRef<"Product", 'String'>
+    readonly imagePath: FieldRef<"Product", 'String'>
+    readonly detail: FieldRef<"Product", 'String'>
+    readonly mfgDate: FieldRef<"Product", 'DateTime'>
+    readonly lowStockAlert: FieldRef<"Product", 'Float'>
+    readonly supplierPrice: FieldRef<"Product", 'Float'>
+    readonly model: FieldRef<"Product", 'String'>
+    readonly supplierId: FieldRef<"Product", 'String'>
     readonly createdAt: FieldRef<"Product", 'DateTime'>
   }
     
@@ -8753,6 +8968,44 @@ export namespace Prisma {
      */
     include?: CategoryInclude<ExtArgs> | null
     where?: CategoryWhereInput
+  }
+
+  /**
+   * Product.warehouse
+   */
+  export type Product$warehouseArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Warehouse
+     */
+    select?: WarehouseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Warehouse
+     */
+    omit?: WarehouseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WarehouseInclude<ExtArgs> | null
+    where?: WarehouseWhereInput
+  }
+
+  /**
+   * Product.supplier
+   */
+  export type Product$supplierArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Supplier
+     */
+    select?: SupplierSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Supplier
+     */
+    omit?: SupplierOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupplierInclude<ExtArgs> | null
+    where?: SupplierWhereInput
   }
 
   /**
@@ -17801,6 +18054,15 @@ export namespace Prisma {
     unit: 'unit',
     expiryDate: 'expiryDate',
     categoryId: 'categoryId',
+    warehouseId: 'warehouseId',
+    rackNo: 'rackNo',
+    imagePath: 'imagePath',
+    detail: 'detail',
+    mfgDate: 'mfgDate',
+    lowStockAlert: 'lowStockAlert',
+    supplierPrice: 'supplierPrice',
+    model: 'model',
+    supplierId: 'supplierId',
     createdAt: 'createdAt'
   };
 
@@ -18150,6 +18412,7 @@ export namespace Prisma {
     address?: StringNullableFilter<"Supplier"> | string | null
     createdAt?: DateTimeFilter<"Supplier"> | Date | string
     invoices?: SupplierInvoiceListRelationFilter
+    products?: ProductListRelationFilter
   }
 
   export type SupplierOrderByWithRelationInput = {
@@ -18161,6 +18424,7 @@ export namespace Prisma {
     address?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     invoices?: SupplierInvoiceOrderByRelationAggregateInput
+    products?: ProductOrderByRelationAggregateInput
   }
 
   export type SupplierWhereUniqueInput = Prisma.AtLeast<{
@@ -18175,6 +18439,7 @@ export namespace Prisma {
     address?: StringNullableFilter<"Supplier"> | string | null
     createdAt?: DateTimeFilter<"Supplier"> | Date | string
     invoices?: SupplierInvoiceListRelationFilter
+    products?: ProductListRelationFilter
   }, "id">
 
   export type SupplierOrderByWithAggregationInput = {
@@ -18265,6 +18530,7 @@ export namespace Prisma {
     phone?: StringNullableFilter<"Warehouse"> | string | null
     createdAt?: DateTimeFilter<"Warehouse"> | Date | string
     invoices?: SupplierInvoiceListRelationFilter
+    products?: ProductListRelationFilter
   }
 
   export type WarehouseOrderByWithRelationInput = {
@@ -18276,6 +18542,7 @@ export namespace Prisma {
     phone?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     invoices?: SupplierInvoiceOrderByRelationAggregateInput
+    products?: ProductOrderByRelationAggregateInput
   }
 
   export type WarehouseWhereUniqueInput = Prisma.AtLeast<{
@@ -18290,6 +18557,7 @@ export namespace Prisma {
     phone?: StringNullableFilter<"Warehouse"> | string | null
     createdAt?: DateTimeFilter<"Warehouse"> | Date | string
     invoices?: SupplierInvoiceListRelationFilter
+    products?: ProductListRelationFilter
   }, "id" | "name">
 
   export type WarehouseOrderByWithAggregationInput = {
@@ -18332,8 +18600,19 @@ export namespace Prisma {
     unit?: StringFilter<"Product"> | string
     expiryDate?: DateTimeNullableFilter<"Product"> | Date | string | null
     categoryId?: StringNullableFilter<"Product"> | string | null
+    warehouseId?: StringNullableFilter<"Product"> | string | null
+    rackNo?: StringNullableFilter<"Product"> | string | null
+    imagePath?: StringNullableFilter<"Product"> | string | null
+    detail?: StringNullableFilter<"Product"> | string | null
+    mfgDate?: DateTimeNullableFilter<"Product"> | Date | string | null
+    lowStockAlert?: FloatNullableFilter<"Product"> | number | null
+    supplierPrice?: FloatNullableFilter<"Product"> | number | null
+    model?: StringNullableFilter<"Product"> | string | null
+    supplierId?: StringNullableFilter<"Product"> | string | null
     createdAt?: DateTimeFilter<"Product"> | Date | string
     category?: XOR<CategoryNullableScalarRelationFilter, CategoryWhereInput> | null
+    warehouse?: XOR<WarehouseNullableScalarRelationFilter, WarehouseWhereInput> | null
+    supplier?: XOR<SupplierNullableScalarRelationFilter, SupplierWhereInput> | null
     saleItems?: SaleItemListRelationFilter
   }
 
@@ -18346,8 +18625,19 @@ export namespace Prisma {
     unit?: SortOrder
     expiryDate?: SortOrderInput | SortOrder
     categoryId?: SortOrderInput | SortOrder
+    warehouseId?: SortOrderInput | SortOrder
+    rackNo?: SortOrderInput | SortOrder
+    imagePath?: SortOrderInput | SortOrder
+    detail?: SortOrderInput | SortOrder
+    mfgDate?: SortOrderInput | SortOrder
+    lowStockAlert?: SortOrderInput | SortOrder
+    supplierPrice?: SortOrderInput | SortOrder
+    model?: SortOrderInput | SortOrder
+    supplierId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     category?: CategoryOrderByWithRelationInput
+    warehouse?: WarehouseOrderByWithRelationInput
+    supplier?: SupplierOrderByWithRelationInput
     saleItems?: SaleItemOrderByRelationAggregateInput
   }
 
@@ -18363,8 +18653,19 @@ export namespace Prisma {
     unit?: StringFilter<"Product"> | string
     expiryDate?: DateTimeNullableFilter<"Product"> | Date | string | null
     categoryId?: StringNullableFilter<"Product"> | string | null
+    warehouseId?: StringNullableFilter<"Product"> | string | null
+    rackNo?: StringNullableFilter<"Product"> | string | null
+    imagePath?: StringNullableFilter<"Product"> | string | null
+    detail?: StringNullableFilter<"Product"> | string | null
+    mfgDate?: DateTimeNullableFilter<"Product"> | Date | string | null
+    lowStockAlert?: FloatNullableFilter<"Product"> | number | null
+    supplierPrice?: FloatNullableFilter<"Product"> | number | null
+    model?: StringNullableFilter<"Product"> | string | null
+    supplierId?: StringNullableFilter<"Product"> | string | null
     createdAt?: DateTimeFilter<"Product"> | Date | string
     category?: XOR<CategoryNullableScalarRelationFilter, CategoryWhereInput> | null
+    warehouse?: XOR<WarehouseNullableScalarRelationFilter, WarehouseWhereInput> | null
+    supplier?: XOR<SupplierNullableScalarRelationFilter, SupplierWhereInput> | null
     saleItems?: SaleItemListRelationFilter
   }, "id" | "barcode">
 
@@ -18377,6 +18678,15 @@ export namespace Prisma {
     unit?: SortOrder
     expiryDate?: SortOrderInput | SortOrder
     categoryId?: SortOrderInput | SortOrder
+    warehouseId?: SortOrderInput | SortOrder
+    rackNo?: SortOrderInput | SortOrder
+    imagePath?: SortOrderInput | SortOrder
+    detail?: SortOrderInput | SortOrder
+    mfgDate?: SortOrderInput | SortOrder
+    lowStockAlert?: SortOrderInput | SortOrder
+    supplierPrice?: SortOrderInput | SortOrder
+    model?: SortOrderInput | SortOrder
+    supplierId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     _count?: ProductCountOrderByAggregateInput
     _avg?: ProductAvgOrderByAggregateInput
@@ -18397,6 +18707,15 @@ export namespace Prisma {
     unit?: StringWithAggregatesFilter<"Product"> | string
     expiryDate?: DateTimeNullableWithAggregatesFilter<"Product"> | Date | string | null
     categoryId?: StringNullableWithAggregatesFilter<"Product"> | string | null
+    warehouseId?: StringNullableWithAggregatesFilter<"Product"> | string | null
+    rackNo?: StringNullableWithAggregatesFilter<"Product"> | string | null
+    imagePath?: StringNullableWithAggregatesFilter<"Product"> | string | null
+    detail?: StringNullableWithAggregatesFilter<"Product"> | string | null
+    mfgDate?: DateTimeNullableWithAggregatesFilter<"Product"> | Date | string | null
+    lowStockAlert?: FloatNullableWithAggregatesFilter<"Product"> | number | null
+    supplierPrice?: FloatNullableWithAggregatesFilter<"Product"> | number | null
+    model?: StringNullableWithAggregatesFilter<"Product"> | string | null
+    supplierId?: StringNullableWithAggregatesFilter<"Product"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Product"> | Date | string
   }
 
@@ -19129,6 +19448,7 @@ export namespace Prisma {
     address?: string | null
     createdAt?: Date | string
     invoices?: SupplierInvoiceCreateNestedManyWithoutSupplierInput
+    products?: ProductCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierUncheckedCreateInput = {
@@ -19140,6 +19460,7 @@ export namespace Prisma {
     address?: string | null
     createdAt?: Date | string
     invoices?: SupplierInvoiceUncheckedCreateNestedManyWithoutSupplierInput
+    products?: ProductUncheckedCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierUpdateInput = {
@@ -19151,6 +19472,7 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     invoices?: SupplierInvoiceUpdateManyWithoutSupplierNestedInput
+    products?: ProductUpdateManyWithoutSupplierNestedInput
   }
 
   export type SupplierUncheckedUpdateInput = {
@@ -19162,6 +19484,7 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     invoices?: SupplierInvoiceUncheckedUpdateManyWithoutSupplierNestedInput
+    products?: ProductUncheckedUpdateManyWithoutSupplierNestedInput
   }
 
   export type SupplierCreateManyInput = {
@@ -19256,6 +19579,7 @@ export namespace Prisma {
     phone?: string | null
     createdAt?: Date | string
     invoices?: SupplierInvoiceCreateNestedManyWithoutWarehouseInput
+    products?: ProductCreateNestedManyWithoutWarehouseInput
   }
 
   export type WarehouseUncheckedCreateInput = {
@@ -19267,6 +19591,7 @@ export namespace Prisma {
     phone?: string | null
     createdAt?: Date | string
     invoices?: SupplierInvoiceUncheckedCreateNestedManyWithoutWarehouseInput
+    products?: ProductUncheckedCreateNestedManyWithoutWarehouseInput
   }
 
   export type WarehouseUpdateInput = {
@@ -19278,6 +19603,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     invoices?: SupplierInvoiceUpdateManyWithoutWarehouseNestedInput
+    products?: ProductUpdateManyWithoutWarehouseNestedInput
   }
 
   export type WarehouseUncheckedUpdateInput = {
@@ -19289,6 +19615,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     invoices?: SupplierInvoiceUncheckedUpdateManyWithoutWarehouseNestedInput
+    products?: ProductUncheckedUpdateManyWithoutWarehouseNestedInput
   }
 
   export type WarehouseCreateManyInput = {
@@ -19329,8 +19656,17 @@ export namespace Prisma {
     stock?: number
     unit?: string
     expiryDate?: Date | string | null
+    rackNo?: string | null
+    imagePath?: string | null
+    detail?: string | null
+    mfgDate?: Date | string | null
+    lowStockAlert?: number | null
+    supplierPrice?: number | null
+    model?: string | null
     createdAt?: Date | string
     category?: CategoryCreateNestedOneWithoutProductsInput
+    warehouse?: WarehouseCreateNestedOneWithoutProductsInput
+    supplier?: SupplierCreateNestedOneWithoutProductsInput
     saleItems?: SaleItemCreateNestedManyWithoutProductInput
   }
 
@@ -19343,6 +19679,15 @@ export namespace Prisma {
     unit?: string
     expiryDate?: Date | string | null
     categoryId?: string | null
+    warehouseId?: string | null
+    rackNo?: string | null
+    imagePath?: string | null
+    detail?: string | null
+    mfgDate?: Date | string | null
+    lowStockAlert?: number | null
+    supplierPrice?: number | null
+    model?: string | null
+    supplierId?: string | null
     createdAt?: Date | string
     saleItems?: SaleItemUncheckedCreateNestedManyWithoutProductInput
   }
@@ -19355,8 +19700,17 @@ export namespace Prisma {
     stock?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
     expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rackNo?: NullableStringFieldUpdateOperationsInput | string | null
+    imagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    detail?: NullableStringFieldUpdateOperationsInput | string | null
+    mfgDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lowStockAlert?: NullableFloatFieldUpdateOperationsInput | number | null
+    supplierPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    model?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     category?: CategoryUpdateOneWithoutProductsNestedInput
+    warehouse?: WarehouseUpdateOneWithoutProductsNestedInput
+    supplier?: SupplierUpdateOneWithoutProductsNestedInput
     saleItems?: SaleItemUpdateManyWithoutProductNestedInput
   }
 
@@ -19369,6 +19723,15 @@ export namespace Prisma {
     unit?: StringFieldUpdateOperationsInput | string
     expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
+    warehouseId?: NullableStringFieldUpdateOperationsInput | string | null
+    rackNo?: NullableStringFieldUpdateOperationsInput | string | null
+    imagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    detail?: NullableStringFieldUpdateOperationsInput | string | null
+    mfgDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lowStockAlert?: NullableFloatFieldUpdateOperationsInput | number | null
+    supplierPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    supplierId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     saleItems?: SaleItemUncheckedUpdateManyWithoutProductNestedInput
   }
@@ -19382,6 +19745,15 @@ export namespace Prisma {
     unit?: string
     expiryDate?: Date | string | null
     categoryId?: string | null
+    warehouseId?: string | null
+    rackNo?: string | null
+    imagePath?: string | null
+    detail?: string | null
+    mfgDate?: Date | string | null
+    lowStockAlert?: number | null
+    supplierPrice?: number | null
+    model?: string | null
+    supplierId?: string | null
     createdAt?: Date | string
   }
 
@@ -19393,6 +19765,13 @@ export namespace Prisma {
     stock?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
     expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rackNo?: NullableStringFieldUpdateOperationsInput | string | null
+    imagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    detail?: NullableStringFieldUpdateOperationsInput | string | null
+    mfgDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lowStockAlert?: NullableFloatFieldUpdateOperationsInput | number | null
+    supplierPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    model?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -19405,6 +19784,15 @@ export namespace Prisma {
     unit?: StringFieldUpdateOperationsInput | string
     expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
+    warehouseId?: NullableStringFieldUpdateOperationsInput | string | null
+    rackNo?: NullableStringFieldUpdateOperationsInput | string | null
+    imagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    detail?: NullableStringFieldUpdateOperationsInput | string | null
+    mfgDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lowStockAlert?: NullableFloatFieldUpdateOperationsInput | number | null
+    supplierPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    supplierId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -20227,7 +20615,17 @@ export namespace Prisma {
     none?: SupplierInvoiceWhereInput
   }
 
+  export type ProductListRelationFilter = {
+    every?: ProductWhereInput
+    some?: ProductWhereInput
+    none?: ProductWhereInput
+  }
+
   export type SupplierInvoiceOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ProductOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -20259,16 +20657,6 @@ export namespace Prisma {
     phone?: SortOrder
     address?: SortOrder
     createdAt?: SortOrder
-  }
-
-  export type ProductListRelationFilter = {
-    every?: ProductWhereInput
-    some?: ProductWhereInput
-    none?: ProductWhereInput
-  }
-
-  export type ProductOrderByRelationAggregateInput = {
-    _count?: SortOrder
   }
 
   export type CategoryCountOrderByAggregateInput = {
@@ -20368,9 +20756,30 @@ export namespace Prisma {
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
+  export type FloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
   export type CategoryNullableScalarRelationFilter = {
     is?: CategoryWhereInput | null
     isNot?: CategoryWhereInput | null
+  }
+
+  export type WarehouseNullableScalarRelationFilter = {
+    is?: WarehouseWhereInput | null
+    isNot?: WarehouseWhereInput | null
+  }
+
+  export type SupplierNullableScalarRelationFilter = {
+    is?: SupplierWhereInput | null
+    isNot?: SupplierWhereInput | null
   }
 
   export type SaleItemListRelationFilter = {
@@ -20392,12 +20801,23 @@ export namespace Prisma {
     unit?: SortOrder
     expiryDate?: SortOrder
     categoryId?: SortOrder
+    warehouseId?: SortOrder
+    rackNo?: SortOrder
+    imagePath?: SortOrder
+    detail?: SortOrder
+    mfgDate?: SortOrder
+    lowStockAlert?: SortOrder
+    supplierPrice?: SortOrder
+    model?: SortOrder
+    supplierId?: SortOrder
     createdAt?: SortOrder
   }
 
   export type ProductAvgOrderByAggregateInput = {
     price?: SortOrder
     stock?: SortOrder
+    lowStockAlert?: SortOrder
+    supplierPrice?: SortOrder
   }
 
   export type ProductMaxOrderByAggregateInput = {
@@ -20409,6 +20829,15 @@ export namespace Prisma {
     unit?: SortOrder
     expiryDate?: SortOrder
     categoryId?: SortOrder
+    warehouseId?: SortOrder
+    rackNo?: SortOrder
+    imagePath?: SortOrder
+    detail?: SortOrder
+    mfgDate?: SortOrder
+    lowStockAlert?: SortOrder
+    supplierPrice?: SortOrder
+    model?: SortOrder
+    supplierId?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -20421,12 +20850,23 @@ export namespace Prisma {
     unit?: SortOrder
     expiryDate?: SortOrder
     categoryId?: SortOrder
+    warehouseId?: SortOrder
+    rackNo?: SortOrder
+    imagePath?: SortOrder
+    detail?: SortOrder
+    mfgDate?: SortOrder
+    lowStockAlert?: SortOrder
+    supplierPrice?: SortOrder
+    model?: SortOrder
+    supplierId?: SortOrder
     createdAt?: SortOrder
   }
 
   export type ProductSumOrderByAggregateInput = {
     price?: SortOrder
     stock?: SortOrder
+    lowStockAlert?: SortOrder
+    supplierPrice?: SortOrder
   }
 
   export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -20441,6 +20881,22 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
   export type SaleTransactionCountOrderByAggregateInput = {
@@ -20882,11 +21338,25 @@ export namespace Prisma {
     connect?: SupplierInvoiceWhereUniqueInput | SupplierInvoiceWhereUniqueInput[]
   }
 
+  export type ProductCreateNestedManyWithoutSupplierInput = {
+    create?: XOR<ProductCreateWithoutSupplierInput, ProductUncheckedCreateWithoutSupplierInput> | ProductCreateWithoutSupplierInput[] | ProductUncheckedCreateWithoutSupplierInput[]
+    connectOrCreate?: ProductCreateOrConnectWithoutSupplierInput | ProductCreateOrConnectWithoutSupplierInput[]
+    createMany?: ProductCreateManySupplierInputEnvelope
+    connect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+  }
+
   export type SupplierInvoiceUncheckedCreateNestedManyWithoutSupplierInput = {
     create?: XOR<SupplierInvoiceCreateWithoutSupplierInput, SupplierInvoiceUncheckedCreateWithoutSupplierInput> | SupplierInvoiceCreateWithoutSupplierInput[] | SupplierInvoiceUncheckedCreateWithoutSupplierInput[]
     connectOrCreate?: SupplierInvoiceCreateOrConnectWithoutSupplierInput | SupplierInvoiceCreateOrConnectWithoutSupplierInput[]
     createMany?: SupplierInvoiceCreateManySupplierInputEnvelope
     connect?: SupplierInvoiceWhereUniqueInput | SupplierInvoiceWhereUniqueInput[]
+  }
+
+  export type ProductUncheckedCreateNestedManyWithoutSupplierInput = {
+    create?: XOR<ProductCreateWithoutSupplierInput, ProductUncheckedCreateWithoutSupplierInput> | ProductCreateWithoutSupplierInput[] | ProductUncheckedCreateWithoutSupplierInput[]
+    connectOrCreate?: ProductCreateOrConnectWithoutSupplierInput | ProductCreateOrConnectWithoutSupplierInput[]
+    createMany?: ProductCreateManySupplierInputEnvelope
+    connect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
   }
 
   export type SupplierInvoiceUpdateManyWithoutSupplierNestedInput = {
@@ -20903,6 +21373,20 @@ export namespace Prisma {
     deleteMany?: SupplierInvoiceScalarWhereInput | SupplierInvoiceScalarWhereInput[]
   }
 
+  export type ProductUpdateManyWithoutSupplierNestedInput = {
+    create?: XOR<ProductCreateWithoutSupplierInput, ProductUncheckedCreateWithoutSupplierInput> | ProductCreateWithoutSupplierInput[] | ProductUncheckedCreateWithoutSupplierInput[]
+    connectOrCreate?: ProductCreateOrConnectWithoutSupplierInput | ProductCreateOrConnectWithoutSupplierInput[]
+    upsert?: ProductUpsertWithWhereUniqueWithoutSupplierInput | ProductUpsertWithWhereUniqueWithoutSupplierInput[]
+    createMany?: ProductCreateManySupplierInputEnvelope
+    set?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    disconnect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    delete?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    connect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    update?: ProductUpdateWithWhereUniqueWithoutSupplierInput | ProductUpdateWithWhereUniqueWithoutSupplierInput[]
+    updateMany?: ProductUpdateManyWithWhereWithoutSupplierInput | ProductUpdateManyWithWhereWithoutSupplierInput[]
+    deleteMany?: ProductScalarWhereInput | ProductScalarWhereInput[]
+  }
+
   export type SupplierInvoiceUncheckedUpdateManyWithoutSupplierNestedInput = {
     create?: XOR<SupplierInvoiceCreateWithoutSupplierInput, SupplierInvoiceUncheckedCreateWithoutSupplierInput> | SupplierInvoiceCreateWithoutSupplierInput[] | SupplierInvoiceUncheckedCreateWithoutSupplierInput[]
     connectOrCreate?: SupplierInvoiceCreateOrConnectWithoutSupplierInput | SupplierInvoiceCreateOrConnectWithoutSupplierInput[]
@@ -20915,6 +21399,20 @@ export namespace Prisma {
     update?: SupplierInvoiceUpdateWithWhereUniqueWithoutSupplierInput | SupplierInvoiceUpdateWithWhereUniqueWithoutSupplierInput[]
     updateMany?: SupplierInvoiceUpdateManyWithWhereWithoutSupplierInput | SupplierInvoiceUpdateManyWithWhereWithoutSupplierInput[]
     deleteMany?: SupplierInvoiceScalarWhereInput | SupplierInvoiceScalarWhereInput[]
+  }
+
+  export type ProductUncheckedUpdateManyWithoutSupplierNestedInput = {
+    create?: XOR<ProductCreateWithoutSupplierInput, ProductUncheckedCreateWithoutSupplierInput> | ProductCreateWithoutSupplierInput[] | ProductUncheckedCreateWithoutSupplierInput[]
+    connectOrCreate?: ProductCreateOrConnectWithoutSupplierInput | ProductCreateOrConnectWithoutSupplierInput[]
+    upsert?: ProductUpsertWithWhereUniqueWithoutSupplierInput | ProductUpsertWithWhereUniqueWithoutSupplierInput[]
+    createMany?: ProductCreateManySupplierInputEnvelope
+    set?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    disconnect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    delete?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    connect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    update?: ProductUpdateWithWhereUniqueWithoutSupplierInput | ProductUpdateWithWhereUniqueWithoutSupplierInput[]
+    updateMany?: ProductUpdateManyWithWhereWithoutSupplierInput | ProductUpdateManyWithWhereWithoutSupplierInput[]
+    deleteMany?: ProductScalarWhereInput | ProductScalarWhereInput[]
   }
 
   export type ProductCreateNestedManyWithoutCategoryInput = {
@@ -20966,11 +21464,25 @@ export namespace Prisma {
     connect?: SupplierInvoiceWhereUniqueInput | SupplierInvoiceWhereUniqueInput[]
   }
 
+  export type ProductCreateNestedManyWithoutWarehouseInput = {
+    create?: XOR<ProductCreateWithoutWarehouseInput, ProductUncheckedCreateWithoutWarehouseInput> | ProductCreateWithoutWarehouseInput[] | ProductUncheckedCreateWithoutWarehouseInput[]
+    connectOrCreate?: ProductCreateOrConnectWithoutWarehouseInput | ProductCreateOrConnectWithoutWarehouseInput[]
+    createMany?: ProductCreateManyWarehouseInputEnvelope
+    connect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+  }
+
   export type SupplierInvoiceUncheckedCreateNestedManyWithoutWarehouseInput = {
     create?: XOR<SupplierInvoiceCreateWithoutWarehouseInput, SupplierInvoiceUncheckedCreateWithoutWarehouseInput> | SupplierInvoiceCreateWithoutWarehouseInput[] | SupplierInvoiceUncheckedCreateWithoutWarehouseInput[]
     connectOrCreate?: SupplierInvoiceCreateOrConnectWithoutWarehouseInput | SupplierInvoiceCreateOrConnectWithoutWarehouseInput[]
     createMany?: SupplierInvoiceCreateManyWarehouseInputEnvelope
     connect?: SupplierInvoiceWhereUniqueInput | SupplierInvoiceWhereUniqueInput[]
+  }
+
+  export type ProductUncheckedCreateNestedManyWithoutWarehouseInput = {
+    create?: XOR<ProductCreateWithoutWarehouseInput, ProductUncheckedCreateWithoutWarehouseInput> | ProductCreateWithoutWarehouseInput[] | ProductUncheckedCreateWithoutWarehouseInput[]
+    connectOrCreate?: ProductCreateOrConnectWithoutWarehouseInput | ProductCreateOrConnectWithoutWarehouseInput[]
+    createMany?: ProductCreateManyWarehouseInputEnvelope
+    connect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
   }
 
   export type NullableIntFieldUpdateOperationsInput = {
@@ -20995,6 +21507,20 @@ export namespace Prisma {
     deleteMany?: SupplierInvoiceScalarWhereInput | SupplierInvoiceScalarWhereInput[]
   }
 
+  export type ProductUpdateManyWithoutWarehouseNestedInput = {
+    create?: XOR<ProductCreateWithoutWarehouseInput, ProductUncheckedCreateWithoutWarehouseInput> | ProductCreateWithoutWarehouseInput[] | ProductUncheckedCreateWithoutWarehouseInput[]
+    connectOrCreate?: ProductCreateOrConnectWithoutWarehouseInput | ProductCreateOrConnectWithoutWarehouseInput[]
+    upsert?: ProductUpsertWithWhereUniqueWithoutWarehouseInput | ProductUpsertWithWhereUniqueWithoutWarehouseInput[]
+    createMany?: ProductCreateManyWarehouseInputEnvelope
+    set?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    disconnect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    delete?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    connect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    update?: ProductUpdateWithWhereUniqueWithoutWarehouseInput | ProductUpdateWithWhereUniqueWithoutWarehouseInput[]
+    updateMany?: ProductUpdateManyWithWhereWithoutWarehouseInput | ProductUpdateManyWithWhereWithoutWarehouseInput[]
+    deleteMany?: ProductScalarWhereInput | ProductScalarWhereInput[]
+  }
+
   export type SupplierInvoiceUncheckedUpdateManyWithoutWarehouseNestedInput = {
     create?: XOR<SupplierInvoiceCreateWithoutWarehouseInput, SupplierInvoiceUncheckedCreateWithoutWarehouseInput> | SupplierInvoiceCreateWithoutWarehouseInput[] | SupplierInvoiceUncheckedCreateWithoutWarehouseInput[]
     connectOrCreate?: SupplierInvoiceCreateOrConnectWithoutWarehouseInput | SupplierInvoiceCreateOrConnectWithoutWarehouseInput[]
@@ -21009,10 +21535,36 @@ export namespace Prisma {
     deleteMany?: SupplierInvoiceScalarWhereInput | SupplierInvoiceScalarWhereInput[]
   }
 
+  export type ProductUncheckedUpdateManyWithoutWarehouseNestedInput = {
+    create?: XOR<ProductCreateWithoutWarehouseInput, ProductUncheckedCreateWithoutWarehouseInput> | ProductCreateWithoutWarehouseInput[] | ProductUncheckedCreateWithoutWarehouseInput[]
+    connectOrCreate?: ProductCreateOrConnectWithoutWarehouseInput | ProductCreateOrConnectWithoutWarehouseInput[]
+    upsert?: ProductUpsertWithWhereUniqueWithoutWarehouseInput | ProductUpsertWithWhereUniqueWithoutWarehouseInput[]
+    createMany?: ProductCreateManyWarehouseInputEnvelope
+    set?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    disconnect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    delete?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    connect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    update?: ProductUpdateWithWhereUniqueWithoutWarehouseInput | ProductUpdateWithWhereUniqueWithoutWarehouseInput[]
+    updateMany?: ProductUpdateManyWithWhereWithoutWarehouseInput | ProductUpdateManyWithWhereWithoutWarehouseInput[]
+    deleteMany?: ProductScalarWhereInput | ProductScalarWhereInput[]
+  }
+
   export type CategoryCreateNestedOneWithoutProductsInput = {
     create?: XOR<CategoryCreateWithoutProductsInput, CategoryUncheckedCreateWithoutProductsInput>
     connectOrCreate?: CategoryCreateOrConnectWithoutProductsInput
     connect?: CategoryWhereUniqueInput
+  }
+
+  export type WarehouseCreateNestedOneWithoutProductsInput = {
+    create?: XOR<WarehouseCreateWithoutProductsInput, WarehouseUncheckedCreateWithoutProductsInput>
+    connectOrCreate?: WarehouseCreateOrConnectWithoutProductsInput
+    connect?: WarehouseWhereUniqueInput
+  }
+
+  export type SupplierCreateNestedOneWithoutProductsInput = {
+    create?: XOR<SupplierCreateWithoutProductsInput, SupplierUncheckedCreateWithoutProductsInput>
+    connectOrCreate?: SupplierCreateOrConnectWithoutProductsInput
+    connect?: SupplierWhereUniqueInput
   }
 
   export type SaleItemCreateNestedManyWithoutProductInput = {
@@ -21033,6 +21585,14 @@ export namespace Prisma {
     set?: Date | string | null
   }
 
+  export type NullableFloatFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type CategoryUpdateOneWithoutProductsNestedInput = {
     create?: XOR<CategoryCreateWithoutProductsInput, CategoryUncheckedCreateWithoutProductsInput>
     connectOrCreate?: CategoryCreateOrConnectWithoutProductsInput
@@ -21041,6 +21601,26 @@ export namespace Prisma {
     delete?: CategoryWhereInput | boolean
     connect?: CategoryWhereUniqueInput
     update?: XOR<XOR<CategoryUpdateToOneWithWhereWithoutProductsInput, CategoryUpdateWithoutProductsInput>, CategoryUncheckedUpdateWithoutProductsInput>
+  }
+
+  export type WarehouseUpdateOneWithoutProductsNestedInput = {
+    create?: XOR<WarehouseCreateWithoutProductsInput, WarehouseUncheckedCreateWithoutProductsInput>
+    connectOrCreate?: WarehouseCreateOrConnectWithoutProductsInput
+    upsert?: WarehouseUpsertWithoutProductsInput
+    disconnect?: WarehouseWhereInput | boolean
+    delete?: WarehouseWhereInput | boolean
+    connect?: WarehouseWhereUniqueInput
+    update?: XOR<XOR<WarehouseUpdateToOneWithWhereWithoutProductsInput, WarehouseUpdateWithoutProductsInput>, WarehouseUncheckedUpdateWithoutProductsInput>
+  }
+
+  export type SupplierUpdateOneWithoutProductsNestedInput = {
+    create?: XOR<SupplierCreateWithoutProductsInput, SupplierUncheckedCreateWithoutProductsInput>
+    connectOrCreate?: SupplierCreateOrConnectWithoutProductsInput
+    upsert?: SupplierUpsertWithoutProductsInput
+    disconnect?: SupplierWhereInput | boolean
+    delete?: SupplierWhereInput | boolean
+    connect?: SupplierWhereUniqueInput
+    update?: XOR<XOR<SupplierUpdateToOneWithWhereWithoutProductsInput, SupplierUpdateWithoutProductsInput>, SupplierUncheckedUpdateWithoutProductsInput>
   }
 
   export type SaleItemUpdateManyWithoutProductNestedInput = {
@@ -21423,6 +22003,22 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
+  export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
+  }
+
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -21475,6 +22071,58 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ProductCreateWithoutSupplierInput = {
+    id?: string
+    name: string
+    barcode: string
+    price?: number
+    stock?: number
+    unit?: string
+    expiryDate?: Date | string | null
+    rackNo?: string | null
+    imagePath?: string | null
+    detail?: string | null
+    mfgDate?: Date | string | null
+    lowStockAlert?: number | null
+    supplierPrice?: number | null
+    model?: string | null
+    createdAt?: Date | string
+    category?: CategoryCreateNestedOneWithoutProductsInput
+    warehouse?: WarehouseCreateNestedOneWithoutProductsInput
+    saleItems?: SaleItemCreateNestedManyWithoutProductInput
+  }
+
+  export type ProductUncheckedCreateWithoutSupplierInput = {
+    id?: string
+    name: string
+    barcode: string
+    price?: number
+    stock?: number
+    unit?: string
+    expiryDate?: Date | string | null
+    categoryId?: string | null
+    warehouseId?: string | null
+    rackNo?: string | null
+    imagePath?: string | null
+    detail?: string | null
+    mfgDate?: Date | string | null
+    lowStockAlert?: number | null
+    supplierPrice?: number | null
+    model?: string | null
+    createdAt?: Date | string
+    saleItems?: SaleItemUncheckedCreateNestedManyWithoutProductInput
+  }
+
+  export type ProductCreateOrConnectWithoutSupplierInput = {
+    where: ProductWhereUniqueInput
+    create: XOR<ProductCreateWithoutSupplierInput, ProductUncheckedCreateWithoutSupplierInput>
+  }
+
+  export type ProductCreateManySupplierInputEnvelope = {
+    data: ProductCreateManySupplierInput | ProductCreateManySupplierInput[]
+    skipDuplicates?: boolean
+  }
+
   export type SupplierInvoiceUpsertWithWhereUniqueWithoutSupplierInput = {
     where: SupplierInvoiceWhereUniqueInput
     update: XOR<SupplierInvoiceUpdateWithoutSupplierInput, SupplierInvoiceUncheckedUpdateWithoutSupplierInput>
@@ -21507,6 +22155,46 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"SupplierInvoice"> | Date | string
   }
 
+  export type ProductUpsertWithWhereUniqueWithoutSupplierInput = {
+    where: ProductWhereUniqueInput
+    update: XOR<ProductUpdateWithoutSupplierInput, ProductUncheckedUpdateWithoutSupplierInput>
+    create: XOR<ProductCreateWithoutSupplierInput, ProductUncheckedCreateWithoutSupplierInput>
+  }
+
+  export type ProductUpdateWithWhereUniqueWithoutSupplierInput = {
+    where: ProductWhereUniqueInput
+    data: XOR<ProductUpdateWithoutSupplierInput, ProductUncheckedUpdateWithoutSupplierInput>
+  }
+
+  export type ProductUpdateManyWithWhereWithoutSupplierInput = {
+    where: ProductScalarWhereInput
+    data: XOR<ProductUpdateManyMutationInput, ProductUncheckedUpdateManyWithoutSupplierInput>
+  }
+
+  export type ProductScalarWhereInput = {
+    AND?: ProductScalarWhereInput | ProductScalarWhereInput[]
+    OR?: ProductScalarWhereInput[]
+    NOT?: ProductScalarWhereInput | ProductScalarWhereInput[]
+    id?: StringFilter<"Product"> | string
+    name?: StringFilter<"Product"> | string
+    barcode?: StringFilter<"Product"> | string
+    price?: FloatFilter<"Product"> | number
+    stock?: FloatFilter<"Product"> | number
+    unit?: StringFilter<"Product"> | string
+    expiryDate?: DateTimeNullableFilter<"Product"> | Date | string | null
+    categoryId?: StringNullableFilter<"Product"> | string | null
+    warehouseId?: StringNullableFilter<"Product"> | string | null
+    rackNo?: StringNullableFilter<"Product"> | string | null
+    imagePath?: StringNullableFilter<"Product"> | string | null
+    detail?: StringNullableFilter<"Product"> | string | null
+    mfgDate?: DateTimeNullableFilter<"Product"> | Date | string | null
+    lowStockAlert?: FloatNullableFilter<"Product"> | number | null
+    supplierPrice?: FloatNullableFilter<"Product"> | number | null
+    model?: StringNullableFilter<"Product"> | string | null
+    supplierId?: StringNullableFilter<"Product"> | string | null
+    createdAt?: DateTimeFilter<"Product"> | Date | string
+  }
+
   export type ProductCreateWithoutCategoryInput = {
     id?: string
     name: string
@@ -21515,7 +22203,16 @@ export namespace Prisma {
     stock?: number
     unit?: string
     expiryDate?: Date | string | null
+    rackNo?: string | null
+    imagePath?: string | null
+    detail?: string | null
+    mfgDate?: Date | string | null
+    lowStockAlert?: number | null
+    supplierPrice?: number | null
+    model?: string | null
     createdAt?: Date | string
+    warehouse?: WarehouseCreateNestedOneWithoutProductsInput
+    supplier?: SupplierCreateNestedOneWithoutProductsInput
     saleItems?: SaleItemCreateNestedManyWithoutProductInput
   }
 
@@ -21527,6 +22224,15 @@ export namespace Prisma {
     stock?: number
     unit?: string
     expiryDate?: Date | string | null
+    warehouseId?: string | null
+    rackNo?: string | null
+    imagePath?: string | null
+    detail?: string | null
+    mfgDate?: Date | string | null
+    lowStockAlert?: number | null
+    supplierPrice?: number | null
+    model?: string | null
+    supplierId?: string | null
     createdAt?: Date | string
     saleItems?: SaleItemUncheckedCreateNestedManyWithoutProductInput
   }
@@ -21555,21 +22261,6 @@ export namespace Prisma {
   export type ProductUpdateManyWithWhereWithoutCategoryInput = {
     where: ProductScalarWhereInput
     data: XOR<ProductUpdateManyMutationInput, ProductUncheckedUpdateManyWithoutCategoryInput>
-  }
-
-  export type ProductScalarWhereInput = {
-    AND?: ProductScalarWhereInput | ProductScalarWhereInput[]
-    OR?: ProductScalarWhereInput[]
-    NOT?: ProductScalarWhereInput | ProductScalarWhereInput[]
-    id?: StringFilter<"Product"> | string
-    name?: StringFilter<"Product"> | string
-    barcode?: StringFilter<"Product"> | string
-    price?: FloatFilter<"Product"> | number
-    stock?: FloatFilter<"Product"> | number
-    unit?: StringFilter<"Product"> | string
-    expiryDate?: DateTimeNullableFilter<"Product"> | Date | string | null
-    categoryId?: StringNullableFilter<"Product"> | string | null
-    createdAt?: DateTimeFilter<"Product"> | Date | string
   }
 
   export type SupplierInvoiceCreateWithoutWarehouseInput = {
@@ -21608,6 +22299,58 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ProductCreateWithoutWarehouseInput = {
+    id?: string
+    name: string
+    barcode: string
+    price?: number
+    stock?: number
+    unit?: string
+    expiryDate?: Date | string | null
+    rackNo?: string | null
+    imagePath?: string | null
+    detail?: string | null
+    mfgDate?: Date | string | null
+    lowStockAlert?: number | null
+    supplierPrice?: number | null
+    model?: string | null
+    createdAt?: Date | string
+    category?: CategoryCreateNestedOneWithoutProductsInput
+    supplier?: SupplierCreateNestedOneWithoutProductsInput
+    saleItems?: SaleItemCreateNestedManyWithoutProductInput
+  }
+
+  export type ProductUncheckedCreateWithoutWarehouseInput = {
+    id?: string
+    name: string
+    barcode: string
+    price?: number
+    stock?: number
+    unit?: string
+    expiryDate?: Date | string | null
+    categoryId?: string | null
+    rackNo?: string | null
+    imagePath?: string | null
+    detail?: string | null
+    mfgDate?: Date | string | null
+    lowStockAlert?: number | null
+    supplierPrice?: number | null
+    model?: string | null
+    supplierId?: string | null
+    createdAt?: Date | string
+    saleItems?: SaleItemUncheckedCreateNestedManyWithoutProductInput
+  }
+
+  export type ProductCreateOrConnectWithoutWarehouseInput = {
+    where: ProductWhereUniqueInput
+    create: XOR<ProductCreateWithoutWarehouseInput, ProductUncheckedCreateWithoutWarehouseInput>
+  }
+
+  export type ProductCreateManyWarehouseInputEnvelope = {
+    data: ProductCreateManyWarehouseInput | ProductCreateManyWarehouseInput[]
+    skipDuplicates?: boolean
+  }
+
   export type SupplierInvoiceUpsertWithWhereUniqueWithoutWarehouseInput = {
     where: SupplierInvoiceWhereUniqueInput
     update: XOR<SupplierInvoiceUpdateWithoutWarehouseInput, SupplierInvoiceUncheckedUpdateWithoutWarehouseInput>
@@ -21622,6 +22365,22 @@ export namespace Prisma {
   export type SupplierInvoiceUpdateManyWithWhereWithoutWarehouseInput = {
     where: SupplierInvoiceScalarWhereInput
     data: XOR<SupplierInvoiceUpdateManyMutationInput, SupplierInvoiceUncheckedUpdateManyWithoutWarehouseInput>
+  }
+
+  export type ProductUpsertWithWhereUniqueWithoutWarehouseInput = {
+    where: ProductWhereUniqueInput
+    update: XOR<ProductUpdateWithoutWarehouseInput, ProductUncheckedUpdateWithoutWarehouseInput>
+    create: XOR<ProductCreateWithoutWarehouseInput, ProductUncheckedCreateWithoutWarehouseInput>
+  }
+
+  export type ProductUpdateWithWhereUniqueWithoutWarehouseInput = {
+    where: ProductWhereUniqueInput
+    data: XOR<ProductUpdateWithoutWarehouseInput, ProductUncheckedUpdateWithoutWarehouseInput>
+  }
+
+  export type ProductUpdateManyWithWhereWithoutWarehouseInput = {
+    where: ProductScalarWhereInput
+    data: XOR<ProductUpdateManyMutationInput, ProductUncheckedUpdateManyWithoutWarehouseInput>
   }
 
   export type CategoryCreateWithoutProductsInput = {
@@ -21641,6 +22400,60 @@ export namespace Prisma {
   export type CategoryCreateOrConnectWithoutProductsInput = {
     where: CategoryWhereUniqueInput
     create: XOR<CategoryCreateWithoutProductsInput, CategoryUncheckedCreateWithoutProductsInput>
+  }
+
+  export type WarehouseCreateWithoutProductsInput = {
+    id?: string
+    name: string
+    location?: string | null
+    capacity?: number | null
+    manager?: string | null
+    phone?: string | null
+    createdAt?: Date | string
+    invoices?: SupplierInvoiceCreateNestedManyWithoutWarehouseInput
+  }
+
+  export type WarehouseUncheckedCreateWithoutProductsInput = {
+    id?: string
+    name: string
+    location?: string | null
+    capacity?: number | null
+    manager?: string | null
+    phone?: string | null
+    createdAt?: Date | string
+    invoices?: SupplierInvoiceUncheckedCreateNestedManyWithoutWarehouseInput
+  }
+
+  export type WarehouseCreateOrConnectWithoutProductsInput = {
+    where: WarehouseWhereUniqueInput
+    create: XOR<WarehouseCreateWithoutProductsInput, WarehouseUncheckedCreateWithoutProductsInput>
+  }
+
+  export type SupplierCreateWithoutProductsInput = {
+    id?: string
+    name: string
+    contactPerson: string
+    email?: string | null
+    phone?: string | null
+    address?: string | null
+    createdAt?: Date | string
+    invoices?: SupplierInvoiceCreateNestedManyWithoutSupplierInput
+  }
+
+  export type SupplierUncheckedCreateWithoutProductsInput = {
+    id?: string
+    name: string
+    contactPerson: string
+    email?: string | null
+    phone?: string | null
+    address?: string | null
+    createdAt?: Date | string
+    invoices?: SupplierInvoiceUncheckedCreateNestedManyWithoutSupplierInput
+  }
+
+  export type SupplierCreateOrConnectWithoutProductsInput = {
+    where: SupplierWhereUniqueInput
+    create: XOR<SupplierCreateWithoutProductsInput, SupplierUncheckedCreateWithoutProductsInput>
   }
 
   export type SaleItemCreateWithoutProductInput = {
@@ -21696,6 +22509,72 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WarehouseUpsertWithoutProductsInput = {
+    update: XOR<WarehouseUpdateWithoutProductsInput, WarehouseUncheckedUpdateWithoutProductsInput>
+    create: XOR<WarehouseCreateWithoutProductsInput, WarehouseUncheckedCreateWithoutProductsInput>
+    where?: WarehouseWhereInput
+  }
+
+  export type WarehouseUpdateToOneWithWhereWithoutProductsInput = {
+    where?: WarehouseWhereInput
+    data: XOR<WarehouseUpdateWithoutProductsInput, WarehouseUncheckedUpdateWithoutProductsInput>
+  }
+
+  export type WarehouseUpdateWithoutProductsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    capacity?: NullableIntFieldUpdateOperationsInput | number | null
+    manager?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    invoices?: SupplierInvoiceUpdateManyWithoutWarehouseNestedInput
+  }
+
+  export type WarehouseUncheckedUpdateWithoutProductsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    capacity?: NullableIntFieldUpdateOperationsInput | number | null
+    manager?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    invoices?: SupplierInvoiceUncheckedUpdateManyWithoutWarehouseNestedInput
+  }
+
+  export type SupplierUpsertWithoutProductsInput = {
+    update: XOR<SupplierUpdateWithoutProductsInput, SupplierUncheckedUpdateWithoutProductsInput>
+    create: XOR<SupplierCreateWithoutProductsInput, SupplierUncheckedCreateWithoutProductsInput>
+    where?: SupplierWhereInput
+  }
+
+  export type SupplierUpdateToOneWithWhereWithoutProductsInput = {
+    where?: SupplierWhereInput
+    data: XOR<SupplierUpdateWithoutProductsInput, SupplierUncheckedUpdateWithoutProductsInput>
+  }
+
+  export type SupplierUpdateWithoutProductsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    contactPerson?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    invoices?: SupplierInvoiceUpdateManyWithoutSupplierNestedInput
+  }
+
+  export type SupplierUncheckedUpdateWithoutProductsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    contactPerson?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    invoices?: SupplierInvoiceUncheckedUpdateManyWithoutSupplierNestedInput
   }
 
   export type SaleItemUpsertWithWhereUniqueWithoutProductInput = {
@@ -21809,8 +22688,17 @@ export namespace Prisma {
     stock?: number
     unit?: string
     expiryDate?: Date | string | null
+    rackNo?: string | null
+    imagePath?: string | null
+    detail?: string | null
+    mfgDate?: Date | string | null
+    lowStockAlert?: number | null
+    supplierPrice?: number | null
+    model?: string | null
     createdAt?: Date | string
     category?: CategoryCreateNestedOneWithoutProductsInput
+    warehouse?: WarehouseCreateNestedOneWithoutProductsInput
+    supplier?: SupplierCreateNestedOneWithoutProductsInput
   }
 
   export type ProductUncheckedCreateWithoutSaleItemsInput = {
@@ -21822,6 +22710,15 @@ export namespace Prisma {
     unit?: string
     expiryDate?: Date | string | null
     categoryId?: string | null
+    warehouseId?: string | null
+    rackNo?: string | null
+    imagePath?: string | null
+    detail?: string | null
+    mfgDate?: Date | string | null
+    lowStockAlert?: number | null
+    supplierPrice?: number | null
+    model?: string | null
+    supplierId?: string | null
     createdAt?: Date | string
   }
 
@@ -21882,8 +22779,17 @@ export namespace Prisma {
     stock?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
     expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rackNo?: NullableStringFieldUpdateOperationsInput | string | null
+    imagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    detail?: NullableStringFieldUpdateOperationsInput | string | null
+    mfgDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lowStockAlert?: NullableFloatFieldUpdateOperationsInput | number | null
+    supplierPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    model?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     category?: CategoryUpdateOneWithoutProductsNestedInput
+    warehouse?: WarehouseUpdateOneWithoutProductsNestedInput
+    supplier?: SupplierUpdateOneWithoutProductsNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutSaleItemsInput = {
@@ -21895,6 +22801,15 @@ export namespace Prisma {
     unit?: StringFieldUpdateOperationsInput | string
     expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
+    warehouseId?: NullableStringFieldUpdateOperationsInput | string | null
+    rackNo?: NullableStringFieldUpdateOperationsInput | string | null
+    imagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    detail?: NullableStringFieldUpdateOperationsInput | string | null
+    mfgDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lowStockAlert?: NullableFloatFieldUpdateOperationsInput | number | null
+    supplierPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    supplierId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -21906,6 +22821,7 @@ export namespace Prisma {
     phone?: string | null
     address?: string | null
     createdAt?: Date | string
+    products?: ProductCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierUncheckedCreateWithoutInvoicesInput = {
@@ -21916,6 +22832,7 @@ export namespace Prisma {
     phone?: string | null
     address?: string | null
     createdAt?: Date | string
+    products?: ProductUncheckedCreateNestedManyWithoutSupplierInput
   }
 
   export type SupplierCreateOrConnectWithoutInvoicesInput = {
@@ -21931,6 +22848,7 @@ export namespace Prisma {
     manager?: string | null
     phone?: string | null
     createdAt?: Date | string
+    products?: ProductCreateNestedManyWithoutWarehouseInput
   }
 
   export type WarehouseUncheckedCreateWithoutInvoicesInput = {
@@ -21941,6 +22859,7 @@ export namespace Prisma {
     manager?: string | null
     phone?: string | null
     createdAt?: Date | string
+    products?: ProductUncheckedCreateNestedManyWithoutWarehouseInput
   }
 
   export type WarehouseCreateOrConnectWithoutInvoicesInput = {
@@ -21993,6 +22912,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    products?: ProductUpdateManyWithoutSupplierNestedInput
   }
 
   export type SupplierUncheckedUpdateWithoutInvoicesInput = {
@@ -22003,6 +22923,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    products?: ProductUncheckedUpdateManyWithoutSupplierNestedInput
   }
 
   export type WarehouseUpsertWithoutInvoicesInput = {
@@ -22024,6 +22945,7 @@ export namespace Prisma {
     manager?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    products?: ProductUpdateManyWithoutWarehouseNestedInput
   }
 
   export type WarehouseUncheckedUpdateWithoutInvoicesInput = {
@@ -22034,6 +22956,7 @@ export namespace Prisma {
     manager?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    products?: ProductUncheckedUpdateManyWithoutWarehouseNestedInput
   }
 
   export type SupplierInvoiceItemUpsertWithWhereUniqueWithoutInvoiceInput = {
@@ -22144,6 +23067,26 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
+  export type ProductCreateManySupplierInput = {
+    id?: string
+    name: string
+    barcode: string
+    price?: number
+    stock?: number
+    unit?: string
+    expiryDate?: Date | string | null
+    categoryId?: string | null
+    warehouseId?: string | null
+    rackNo?: string | null
+    imagePath?: string | null
+    detail?: string | null
+    mfgDate?: Date | string | null
+    lowStockAlert?: number | null
+    supplierPrice?: number | null
+    model?: string | null
+    createdAt?: Date | string
+  }
+
   export type SupplierInvoiceUpdateWithoutSupplierInput = {
     id?: StringFieldUpdateOperationsInput | string
     invoiceNo?: StringFieldUpdateOperationsInput | string
@@ -22182,6 +23125,68 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ProductUpdateWithoutSupplierInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    barcode?: StringFieldUpdateOperationsInput | string
+    price?: FloatFieldUpdateOperationsInput | number
+    stock?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rackNo?: NullableStringFieldUpdateOperationsInput | string | null
+    imagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    detail?: NullableStringFieldUpdateOperationsInput | string | null
+    mfgDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lowStockAlert?: NullableFloatFieldUpdateOperationsInput | number | null
+    supplierPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: CategoryUpdateOneWithoutProductsNestedInput
+    warehouse?: WarehouseUpdateOneWithoutProductsNestedInput
+    saleItems?: SaleItemUpdateManyWithoutProductNestedInput
+  }
+
+  export type ProductUncheckedUpdateWithoutSupplierInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    barcode?: StringFieldUpdateOperationsInput | string
+    price?: FloatFieldUpdateOperationsInput | number
+    stock?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    categoryId?: NullableStringFieldUpdateOperationsInput | string | null
+    warehouseId?: NullableStringFieldUpdateOperationsInput | string | null
+    rackNo?: NullableStringFieldUpdateOperationsInput | string | null
+    imagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    detail?: NullableStringFieldUpdateOperationsInput | string | null
+    mfgDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lowStockAlert?: NullableFloatFieldUpdateOperationsInput | number | null
+    supplierPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    saleItems?: SaleItemUncheckedUpdateManyWithoutProductNestedInput
+  }
+
+  export type ProductUncheckedUpdateManyWithoutSupplierInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    barcode?: StringFieldUpdateOperationsInput | string
+    price?: FloatFieldUpdateOperationsInput | number
+    stock?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    categoryId?: NullableStringFieldUpdateOperationsInput | string | null
+    warehouseId?: NullableStringFieldUpdateOperationsInput | string | null
+    rackNo?: NullableStringFieldUpdateOperationsInput | string | null
+    imagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    detail?: NullableStringFieldUpdateOperationsInput | string | null
+    mfgDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lowStockAlert?: NullableFloatFieldUpdateOperationsInput | number | null
+    supplierPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type ProductCreateManyCategoryInput = {
     id?: string
     name: string
@@ -22190,6 +23195,15 @@ export namespace Prisma {
     stock?: number
     unit?: string
     expiryDate?: Date | string | null
+    warehouseId?: string | null
+    rackNo?: string | null
+    imagePath?: string | null
+    detail?: string | null
+    mfgDate?: Date | string | null
+    lowStockAlert?: number | null
+    supplierPrice?: number | null
+    model?: string | null
+    supplierId?: string | null
     createdAt?: Date | string
   }
 
@@ -22201,7 +23215,16 @@ export namespace Prisma {
     stock?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
     expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rackNo?: NullableStringFieldUpdateOperationsInput | string | null
+    imagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    detail?: NullableStringFieldUpdateOperationsInput | string | null
+    mfgDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lowStockAlert?: NullableFloatFieldUpdateOperationsInput | number | null
+    supplierPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    model?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    warehouse?: WarehouseUpdateOneWithoutProductsNestedInput
+    supplier?: SupplierUpdateOneWithoutProductsNestedInput
     saleItems?: SaleItemUpdateManyWithoutProductNestedInput
   }
 
@@ -22213,6 +23236,15 @@ export namespace Prisma {
     stock?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
     expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    warehouseId?: NullableStringFieldUpdateOperationsInput | string | null
+    rackNo?: NullableStringFieldUpdateOperationsInput | string | null
+    imagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    detail?: NullableStringFieldUpdateOperationsInput | string | null
+    mfgDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lowStockAlert?: NullableFloatFieldUpdateOperationsInput | number | null
+    supplierPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    supplierId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     saleItems?: SaleItemUncheckedUpdateManyWithoutProductNestedInput
   }
@@ -22225,6 +23257,15 @@ export namespace Prisma {
     stock?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
     expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    warehouseId?: NullableStringFieldUpdateOperationsInput | string | null
+    rackNo?: NullableStringFieldUpdateOperationsInput | string | null
+    imagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    detail?: NullableStringFieldUpdateOperationsInput | string | null
+    mfgDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lowStockAlert?: NullableFloatFieldUpdateOperationsInput | number | null
+    supplierPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    supplierId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -22237,6 +23278,26 @@ export namespace Prisma {
     grandTotal?: number
     paidAmount?: number
     due?: number
+    createdAt?: Date | string
+  }
+
+  export type ProductCreateManyWarehouseInput = {
+    id?: string
+    name: string
+    barcode: string
+    price?: number
+    stock?: number
+    unit?: string
+    expiryDate?: Date | string | null
+    categoryId?: string | null
+    rackNo?: string | null
+    imagePath?: string | null
+    detail?: string | null
+    mfgDate?: Date | string | null
+    lowStockAlert?: number | null
+    supplierPrice?: number | null
+    model?: string | null
+    supplierId?: string | null
     createdAt?: Date | string
   }
 
@@ -22275,6 +23336,68 @@ export namespace Prisma {
     grandTotal?: FloatFieldUpdateOperationsInput | number
     paidAmount?: FloatFieldUpdateOperationsInput | number
     due?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductUpdateWithoutWarehouseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    barcode?: StringFieldUpdateOperationsInput | string
+    price?: FloatFieldUpdateOperationsInput | number
+    stock?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rackNo?: NullableStringFieldUpdateOperationsInput | string | null
+    imagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    detail?: NullableStringFieldUpdateOperationsInput | string | null
+    mfgDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lowStockAlert?: NullableFloatFieldUpdateOperationsInput | number | null
+    supplierPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: CategoryUpdateOneWithoutProductsNestedInput
+    supplier?: SupplierUpdateOneWithoutProductsNestedInput
+    saleItems?: SaleItemUpdateManyWithoutProductNestedInput
+  }
+
+  export type ProductUncheckedUpdateWithoutWarehouseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    barcode?: StringFieldUpdateOperationsInput | string
+    price?: FloatFieldUpdateOperationsInput | number
+    stock?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    categoryId?: NullableStringFieldUpdateOperationsInput | string | null
+    rackNo?: NullableStringFieldUpdateOperationsInput | string | null
+    imagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    detail?: NullableStringFieldUpdateOperationsInput | string | null
+    mfgDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lowStockAlert?: NullableFloatFieldUpdateOperationsInput | number | null
+    supplierPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    supplierId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    saleItems?: SaleItemUncheckedUpdateManyWithoutProductNestedInput
+  }
+
+  export type ProductUncheckedUpdateManyWithoutWarehouseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    barcode?: StringFieldUpdateOperationsInput | string
+    price?: FloatFieldUpdateOperationsInput | number
+    stock?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    expiryDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    categoryId?: NullableStringFieldUpdateOperationsInput | string | null
+    rackNo?: NullableStringFieldUpdateOperationsInput | string | null
+    imagePath?: NullableStringFieldUpdateOperationsInput | string | null
+    detail?: NullableStringFieldUpdateOperationsInput | string | null
+    mfgDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lowStockAlert?: NullableFloatFieldUpdateOperationsInput | number | null
+    supplierPrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    model?: NullableStringFieldUpdateOperationsInput | string | null
+    supplierId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
