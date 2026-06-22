@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Box,
@@ -16,14 +16,13 @@ import {
   Divider,
   Snackbar,
 } from '@mui/material';
-import { Add as AddIcon, ArrowBack as ArrowBackIcon, Delete as DeleteIcon, Edit as EditIcon } from '@mui/icons-material';
+import { Delete as DeleteIcon, Edit as EditIcon } from '@mui/icons-material';
 import DataTable from '../Components/DataTable';
 
 const API_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? 'http://localhost:5000' : (import.meta.env.VITE_API_URL && !import.meta.env.VITE_API_URL.includes('localhost') ? import.meta.env.VITE_API_URL : window.location.origin);
 
 const Categories = () => {
   const navigate = useNavigate();
-  const [view, setView] = useState('list'); // 'list' | 'add' | 'edit'
   const [categories, setCategories] = useState([]);
   const [selected, setSelected] = useState([]);
   const [editId, setEditId] = useState(null);
@@ -35,13 +34,13 @@ const Categories = () => {
 
   const [formData, setFormData] = useState({ name: '', description: '' });
 
-  const getToken = () => {
+  const getToken = useCallback(() => {
     const token = localStorage.getItem('token');
     if (!token) { navigate('/login'); return null; }
     return token;
-  };
+  }, [navigate]);
 
-  const fetchCategories = async () => {
+  const fetchCategories = useCallback(async () => {
     setLoading(true);
     setError('');
     try {
@@ -69,11 +68,11 @@ const Categories = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [navigate, getToken]);
 
   useEffect(() => {
-    if (view === 'list') fetchCategories();
-  }, [view]);
+    fetchCategories();
+  }, [fetchCategories]);
 
   const handleBulkDelete = async (selectedIds) => {
     setLoading(true);
@@ -117,7 +116,6 @@ const Categories = () => {
   const handleEditClick = (category) => {
     setFormData({ name: category.name, description: category.description || '' });
     setEditId(category.id);
-    setView('edit');
     setError('');
     setSuccessMsg('');
   };
@@ -132,7 +130,7 @@ const Categories = () => {
       return;
     }
 
-    const isEdit = view === 'edit';
+    const isEdit = editId !== null;
     const url = isEdit ? `${API_URL}/api/categories/${editId}` : `${API_URL}/api/categories`;
     const method = isEdit ? 'PUT' : 'POST';
 
@@ -163,7 +161,8 @@ const Categories = () => {
       setSuccessMsg(isEdit ? 'Category updated successfully!' : 'Category added successfully!');
       setFormData({ name: '', description: '' });
       setEditId(null);
-      setTimeout(() => { setView('list'); setSuccessMsg(''); }, 1500);
+      fetchCategories();
+      setTimeout(() => { setSuccessMsg(''); }, 1500);
     } catch (err) {
       setError(err.message || 'Something went wrong');
     } finally {
@@ -205,104 +204,104 @@ const Categories = () => {
       {/* Header */}
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <Typography variant="h5" sx={{ fontWeight: 700, color: '#0f172a' }}>
-          {view === 'list' ? 'Categories' : (view === 'edit' ? 'Edit Category' : 'Add Category')}
+          Categories
         </Typography>
-        {view === 'list' ? (
-          <Button
-            variant="contained"
-            startIcon={<AddIcon />}
-            onClick={() => { setView('add'); setError(''); setEditId(null); setFormData({ name: '', description: '' }); }}
-            sx={{ borderRadius: 2 }}
-          >
-            Add Category
-          </Button>
-        ) : (
-          <Button
-            variant="outlined"
-            startIcon={<ArrowBackIcon />}
-            onClick={() => { setView('list'); setError(''); setEditId(null); }}
-            sx={{ borderRadius: 2 }}
-          >
-            Back to List
-          </Button>
-        )}
       </Box>
       {error && <Alert severity="error">{error}</Alert>}
 
       {/* Content */}
-      {view === 'list' ? (
-        <Card sx={{ border: '1px solid #e2e8f0', borderRadius: 1, boxShadow: '0 1px 2px rgba(0,0,0,0.05)', overflow: 'hidden' }}>
-          <DataTable
-            columns={columns}
-            data={categories}
-            loading={loading}
-            selected={selected}
-            onSelectedChange={setSelected}
-            bulkActions={bulkActions}
-            searchPlaceholder="Search categories..."
-          />
-        </Card>
-      ) : (
-        <Card sx={{ border: '1px solid #e2e8f0', borderRadius: 1, boxShadow: '0 1px 2px rgba(0,0,0,0.05)', p: 3 }}>
-          <Box sx={{ mb: 3 }}>
-            <Typography variant="subtitle1" sx={{ fontWeight: 700, color: '#0f172a' }}>
-              {view === 'edit' ? 'Edit Category' : 'Add Category'}
-            </Typography>
-            <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 0.5 }}>
-              {view === 'edit' ? 'Use this form to edit the category.' : 'Use this form to add a new category.'}
-            </Typography>
-          </Box>
+      <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 3, alignItems: 'flex-start' }}>
+        {/* Left Side - Add/Edit Form */}
+        <Box sx={{ width: { xs: '100%', md: '360px' }, flexShrink: 0 }}>
+          <Card sx={{ border: '1px solid #e2e8f0', borderRadius: 2, boxShadow: '0 1px 2px rgba(0,0,0,0.05)', p: 3, height: 'fit-content' }}>
+            <Box sx={{ mb: 3 }}>
+              <Typography variant="subtitle1" sx={{ fontWeight: 700, color: '#0f172a' }}>
+                {editId !== null ? 'Edit Category' : 'Add Category'}
+              </Typography>
+              <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 0.5 }}>
+                {editId !== null ? 'Modify category details below.' : 'Create a new product category.'}
+              </Typography>
+            </Box>
 
-          <form onSubmit={handleFormSubmit}>
-            <Stack spacing={3} sx={{ maxWidth: 600 }}>
-              <TextField
-                label="Category Name"
-                name="name"
-                variant="standard"
-                autoComplete="off"
-                required
-                fullWidth
-                size="small"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              />
+            <form onSubmit={handleFormSubmit}>
+              <Stack spacing={3}>
+                <TextField
+                  label="Category Name"
+                  name="name"
 
-              <TextField
-                label="Description"
-                name="description"
-                variant="standard"
-                autoComplete="off"
-                fullWidth
-                multiline
-                rows={3}
-                size="small"
-                value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              />
+                  variant="standard"
+                  autoComplete="off"
+                  required
+                  fullWidth
+                  size="small"
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  sx={{
+                    '& .MuiOutlinedInput-root': { borderRadius: 1.5 }
+                  }}
+                />
 
-              <Box sx={{ pt: 2, display: 'flex', gap: 2 }}>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  disabled={loading}
-                  sx={{ borderRadius: 2, px: 4 }}
-                >
-                  {loading ? (view === 'edit' ? 'Saving...' : 'Adding...') : (view === 'edit' ? 'Save Changes' : 'Add Category')}
-                </Button>
-                <Button
-                  variant="outlined"
-                  color="inherit"
-                  disabled={loading}
-                  onClick={() => { setView('list'); setEditId(null); }}
-                  sx={{ borderRadius: 2, px: 4 }}
-                >
-                  Cancel
-                </Button>
-              </Box>
-            </Stack>
-          </form>
-        </Card>
-      )}
+                <TextField
+                  label="Description"
+                  name="description"
+                  variant="standard"
+                  autoComplete="off"
+                  fullWidth
+                  multiline
+                  size="small"
+                  value={formData.description}
+                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  sx={{
+                    '& .MuiOutlinedInput-root': { borderRadius: 1.5 }
+                  }}
+                />
+
+                <Box sx={{ pt: 1, display: 'flex', gap: 1.5 }}>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    disabled={loading}
+                    fullWidth
+                    sx={{ borderRadius: 1.5, py: 1, textTransform: 'none', fontWeight: 600 }}
+                  >
+                    {loading ? (editId !== null ? 'Saving...' : 'Adding...') : (editId !== null ? 'Save Changes' : 'Add Category')}
+                  </Button>
+                  {editId !== null && (
+                    <Button
+                      variant="outlined"
+                      color="inherit"
+                      disabled={loading}
+                      fullWidth
+                      onClick={() => {
+                        setEditId(null);
+                        setFormData({ name: '', description: '' });
+                      }}
+                      sx={{ borderRadius: 1.5, py: 1, textTransform: 'none', fontWeight: 600 }}
+                    >
+                      Cancel
+                    </Button>
+                  )}
+                </Box>
+              </Stack>
+            </form>
+          </Card>
+        </Box>
+
+        {/* Right Side - Table List */}
+        <Box sx={{ flexGrow: 1, minWidth: 0, width: '100%' }}>
+          <Card sx={{ border: '1px solid #e2e8f0', borderRadius: 2, boxShadow: '0 1px 2px rgba(0,0,0,0.05)', overflow: 'hidden' }}>
+            <DataTable
+              columns={columns}
+              data={categories}
+              loading={loading}
+              selected={selected}
+              onSelectedChange={setSelected}
+              bulkActions={bulkActions}
+              searchPlaceholder="Search categories..."
+            />
+          </Card>
+        </Box>
+      </Box>
 
       {/* Delete Confirmation Dialog */}
       <Dialog

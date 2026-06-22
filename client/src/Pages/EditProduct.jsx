@@ -18,6 +18,7 @@ import {
   FormControl,
   InputLabel,
   Select,
+  CircularProgress,
 } from '@mui/material';
 import { Add as AddIcon, ArrowBack as ArrowBackIcon } from '@mui/icons-material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -36,6 +37,7 @@ const EditProduct = () => {
   const [suppliers, setSuppliers] = useState([]);
   
   const [loading, setLoading] = useState(false);
+  const [fetching, setFetching] = useState(true);
   const [error, setError] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
 
@@ -123,6 +125,7 @@ const EditProduct = () => {
   };
 
   const fetchProductDetails = async () => {
+    setFetching(true);
     setLoading(true);
     setError('');
     try {
@@ -166,6 +169,7 @@ const EditProduct = () => {
       setError(err.message || 'Failed to load product details');
     } finally {
       setLoading(false);
+      setFetching(false);
     }
   };
 
@@ -325,8 +329,16 @@ const EditProduct = () => {
           </Typography>
         </Box>
 
-        <form onSubmit={handleFormSubmit} style={{ width: '100%' }}>
-          {/* Top Section Layout - Spans Full Width */}
+        {fetching ? (
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', py: 8, gap: 2 }}>
+            <CircularProgress size={40} />
+            <Typography variant="body2" color="text.secondary">
+              Loading product data...
+            </Typography>
+          </Box>
+        ) : (
+          <form onSubmit={handleFormSubmit} style={{ width: '100%' }}>
+            {/* Top Section Layout - Spans Full Width */}
           <Box sx={{ display: 'flex', gap: 4, mb: 4, flexDirection: { xs: 'column', md: 'row' }, width: '100%' }}>
             {/* Left Column */}
             <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2.5 }}>
@@ -772,6 +784,7 @@ const EditProduct = () => {
             </Button>
           </Box>
         </form>
+        )}
       </Card>
 
       {/* Category Creation Sub-Dialog */}

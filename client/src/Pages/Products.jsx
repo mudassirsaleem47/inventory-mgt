@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Box,
@@ -21,72 +21,9 @@ import {
 } from '@mui/material';
 import { Add as AddIcon, Delete as DeleteIcon, Edit as EditIcon, Print as PrintIcon, Visibility as VisibilityIcon, Upload as UploadIcon } from '@mui/icons-material';
 import DataTable from '../Components/DataTable';
+import Barcode from 'react-barcode';
 
 const API_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? 'http://localhost:5000' : (import.meta.env.VITE_API_URL && !import.meta.env.VITE_API_URL.includes('localhost') ? import.meta.env.VITE_API_URL : window.location.origin);
-
-// Offline Code 39 Barcode Generator
-const BarcodeRenderer = ({ value, svgId = "barcode-svg" }) => {
-  if (!value) return null;
-  const uppercaseValue = `*${String(value).toUpperCase()}*`;
-
-  // Code 39 patterns (9 elements: 5 bars, 4 spaces)
-  const code39Map = {
-    '0': 'N N W W N N N W N', '1': 'W N N W N N N N W', '2': 'N N W W N N N N W', '3': 'W N W W N N N N N',
-    '4': 'N N N W W N N N W', '5': 'W N N W W N N N N', '6': 'N N W W W N N N N', '7': 'N N N W N N W N W',
-    '8': 'W N N W N N W N N', '9': 'N N W W N N W N N', 'A': 'W N N N N W N N W', 'B': 'N N W N N W N N W',
-    'C': 'W N W N N W N N N', 'D': 'N N N N W W N N W', 'E': 'W N N N W W N N N', 'F': 'N N W N W W N N N',
-    'G': 'N N N N N W W N W', 'H': 'W N N N N W W N N', 'I': 'N N W N N W W N N', 'J': 'N N N N W W W N N',
-    'K': 'W N N N N N N W W', 'L': 'N N W N N N N W W', 'M': 'W N W N N N N W N', 'N': 'N N N N W N N W W',
-    'O': 'W N N N W N N W N', 'P': 'N N W N W N N W N', 'Q': 'N N N N N N W W W', 'R': 'W N N N N N W W N',
-    'S': 'N N W N N N W W N', 'T': 'N N N N W N W W N', 'U': 'W W N N N N N N W', 'V': 'N W W N N N N N W',
-    'W': 'W W W N N N N N N', 'X': 'N W N N W N N N W', 'Y': 'W W N N W N N N N', 'Z': 'N W W N W N N N N',
-    '-': 'N W N N N N W N W', '.': 'W W N N N N W N N', ' ': 'N W W N N N W N N', '*': 'N W N N W N W N N',
-    '$': 'N W N W N W N N N', '/': 'N W N W N N N W N', '+': 'N W N N N W N W N', '%': 'N N N W N W N W N'
-  };
-
-  let binaryPattern = '';
-  for (let i = 0; i < uppercaseValue.length; i++) {
-    const char = uppercaseValue[i];
-    const pattern = code39Map[char];
-    if (!pattern) continue; // Skip invalid characters
-    const elements = pattern.split(' ');
-    for (let j = 0; j < elements.length; j++) {
-      const isBlack = (j % 2 === 0);
-      const isWide = (elements[j] === 'W');
-      const width = isWide ? 3 : 1;
-      binaryPattern += isBlack ? '1'.repeat(width) : '0'.repeat(width);
-    }
-    binaryPattern += '0'; // Inter-character gap
-  }
-
-  const barHeight = 50;
-  const barWidth = 1.5;
-  const margin = 20; // 20px quiet zone on left and right
-  const svgWidth = binaryPattern.length * barWidth + (margin * 2);
-
-  let x = margin;
-  const rects = [];
-  for (let i = 0; i < binaryPattern.length; i++) {
-    const bit = binaryPattern[i];
-    if (bit === '1') {
-      rects.push(
-        <rect key={i} x={x} y={0} width={barWidth} height={barHeight} fill="#000" />
-      );
-    }
-    x += barWidth;
-  }
-
-  return (
-    <Box sx={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center', p: 2, bgcolor: '#fff', border: '1px solid #e2e8f0', borderRadius: 1 }}>
-      <svg id={svgId} width={svgWidth} height={barHeight}>
-        {rects}
-      </svg>
-      <Typography variant="caption" sx={{ fontFamily: 'monospace', mt: 1, color: '#0f172a', fontWeight: 600, fontSize: '12px' }}>
-        {value}
-      </Typography>
-    </Box>
-  );
-};
 
 const Products = () => {
   const navigate = useNavigate();
@@ -102,6 +39,7 @@ const Products = () => {
   const [openBarcodeDialog, setOpenBarcodeDialog] = useState(false);
   const [barcodeToPrint, setBarcodeToPrint] = useState('');
   const [productNameToPrint, setProductNameToPrint] = useState('');
+
 
   // View Product Dialog States
   const [openViewDialog, setOpenViewDialog] = useState(false);
@@ -142,39 +80,75 @@ const Products = () => {
         <head>
           <title>Print Barcode Sticker</title>
           <style>
+            @media print {
+              @page {
+                size: 50mm 30mm;
+                margin: 0;
+              }
+              html, body {
+                width: 50mm;
+                height: 30mm;
+                margin: 0;
+                padding: 0;
+                background-color: #fff;
+                -webkit-print-color-adjust: exact;
+              }
+            }
             body {
+              margin: 0;
+              padding: 1.5mm;
+              width: 50mm;
+              height: 30mm;
+              box-sizing: border-box;
               display: flex;
               flex-direction: column;
               align-items: center;
-              justify-content: center;
-              height: 100vh;
-              margin: 0;
-              font-family: 'Inter', sans-serif;
+              justify-content: space-between;
+              font-family: 'Inter', -apple-system, sans-serif;
+              overflow: hidden;
               text-align: center;
             }
-            svg {
-              max-width: 95%;
-              height: auto;
+            .product-name {
+              font-size: 9px;
+              font-weight: 700;
+              color: #000;
+              margin: 1px 0;
+              line-height: 1.2;
+              max-height: 22px;
+              overflow: hidden;
+              display: -webkit-box;
+              -webkit-line-clamp: 2;
+              -webkit-box-orient: vertical;
+              width: 100%;
             }
-            .label-name {
-              font-weight: bold;
-              font-size: 16px;
-              margin-bottom: 8px;
-              color: #0f172a;
+            .barcode-container {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              width: 100%;
+              height: 12mm;
             }
-            .label-val {
+            .barcode-container svg {
+              width: 100%;
+              height: 100%;
+              max-height: 12mm;
+            }
+            .barcode-value {
               font-family: monospace;
-              font-size: 14px;
-              margin-top: 4px;
-              letter-spacing: 2px;
-              color: #0f172a;
+              font-size: 9px;
+              font-weight: 700;
+              margin-top: 1px;
+              letter-spacing: 1px;
+              color: #000;
             }
           </style>
         </head>
         <body>
-          <div class="label-name">${prod.name}</div>
-          ${barcodeHtml}
-          <div class="label-val">${prod.barcode}</div>
+          <div class="product-name">${prod.name}</div>
+          <div class="barcode-container">
+            ${barcodeHtml}
+          </div>
+          <div class="barcode-value">${prod.barcode}</div>
           <script>
             window.onload = function() {
               window.print();
@@ -354,16 +328,16 @@ const Products = () => {
     fetchProducts();
   };
 
-  const getToken = () => {
+  const getToken = useCallback(() => {
     const token = localStorage.getItem('token');
     if (!token) {
       navigate('/login');
       return null;
     }
     return token;
-  };
+  }, [navigate]);
 
-  const fetchProducts = async () => {
+  const fetchProducts = useCallback(async () => {
     setLoading(true);
     setError('');
     try {
@@ -391,11 +365,11 @@ const Products = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [navigate, getToken]);
 
   useEffect(() => {
     fetchProducts();
-  }, []);
+  }, [fetchProducts]);
 
   const handleBulkDelete = async (selectedIds) => {
     setLoading(true);
@@ -448,39 +422,75 @@ const Products = () => {
         <head>
           <title>Print Barcode Sticker</title>
           <style>
+            @media print {
+              @page {
+                size: 50mm 30mm;
+                margin: 0;
+              }
+              html, body {
+                width: 50mm;
+                height: 30mm;
+                margin: 0;
+                padding: 0;
+                background-color: #fff;
+                -webkit-print-color-adjust: exact;
+              }
+            }
             body {
+              margin: 0;
+              padding: 1.5mm;
+              width: 50mm;
+              height: 30mm;
+              box-sizing: border-box;
               display: flex;
               flex-direction: column;
               align-items: center;
-              justify-content: center;
-              height: 100vh;
-              margin: 0;
-              font-family: 'Inter', sans-serif;
+              justify-content: space-between;
+              font-family: 'Inter', -apple-system, sans-serif;
+              overflow: hidden;
               text-align: center;
             }
-            svg {
-              max-width: 95%;
-              height: auto;
+            .product-name {
+              font-size: 9px;
+              font-weight: 700;
+              color: #000;
+              margin: 1px 0;
+              line-height: 1.2;
+              max-height: 22px;
+              overflow: hidden;
+              display: -webkit-box;
+              -webkit-line-clamp: 2;
+              -webkit-box-orient: vertical;
+              width: 100%;
             }
-            .label-name {
-              font-weight: bold;
-              font-size: 16px;
-              margin-bottom: 8px;
-              color: #0f172a;
+            .barcode-container {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              width: 100%;
+              height: 12mm;
             }
-            .label-val {
+            .barcode-container svg {
+              width: 100%;
+              height: 100%;
+              max-height: 12mm;
+            }
+            .barcode-value {
               font-family: monospace;
-              font-size: 14px;
-              margin-top: 4px;
-              letter-spacing: 2px;
-              color: #0f172a;
+              font-size: 9px;
+              font-weight: 700;
+              margin-top: 1px;
+              letter-spacing: 1px;
+              color: #000;
             }
           </style>
         </head>
         <body>
-          <div class="label-name">${productNameToPrint}</div>
-          ${barcodeHtml}
-          <div class="label-val">${barcodeToPrint}</div>
+          <div class="product-name">${productNameToPrint}</div>
+          <div class="barcode-container">
+            ${barcodeHtml}
+          </div>
+          <div class="barcode-value">${barcodeToPrint}</div>
           <script>
             window.onload = function() {
               window.print();
@@ -663,17 +673,68 @@ const Products = () => {
         onClose={() => setOpenBarcodeDialog(false)}
         maxWidth="xs"
         fullWidth
-        PaperProps={{ sx: { borderRadius: 2, p: 1 } }}
+        PaperProps={{ sx: { borderRadius: 3, p: 1 } }}
       >
-        <DialogTitle sx={{ fontWeight: 700, pb: 1 }}>
+        <DialogTitle sx={{ fontWeight: 700, pb: 1.5 }}>
           Barcode Sticker Preview
         </DialogTitle>
         <Divider sx={{ mx: 3 }} />
-        <DialogContent sx={{ py: 3, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
-          <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
-            {productNameToPrint}
-          </Typography>
-          <BarcodeRenderer value={barcodeToPrint} svgId="sticker-barcode-svg" />
+        <DialogContent sx={{ py: 4, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', bgcolor: '#f8fafc', px: 3 }}>
+          {/* Real 50mm x 30mm Sticker Card (Scaled on Screen) */}
+          <Box
+            sx={{
+              width: '280px',
+              height: '168px', // 5:3 Aspect Ratio (50mm x 30mm)
+              bgcolor: '#fff',
+              borderRadius: 2,
+              p: 2.5,
+              boxSizing: 'border-box',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05)',
+            }}
+          >
+            {/* Product Name */}
+            <Typography
+              variant="body2"
+              sx={{
+                fontSize: '12px',
+                fontWeight: 700,
+                color: '#0f172a',
+                lineHeight: 1.2,
+                textAlign: 'center',
+                maxHeight: '40px',
+                overflow: 'hidden',
+                display: '-webkit-box',
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: 'vertical',
+                width: '100%'
+              }}
+            >
+              {productNameToPrint}
+            </Typography>
+
+            {/* Barcode SVG Container */}
+            <Box sx={{ width: '100%', height: '55px', display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden' }}>
+              <Barcode 
+                value={barcodeToPrint}
+                format="CODE128"
+                width={1.2}
+                height={55}
+                displayValue={false}
+                background="transparent"
+                margin={0}
+                id="sticker-barcode-svg"
+              />
+            </Box>
+
+            {/* Barcode Value */}
+            <Typography variant="caption" sx={{ fontFamily: 'monospace', fontWeight: 700, fontSize: '11px', color: '#1e293b', letterSpacing: '1px' }}>
+              {barcodeToPrint}
+            </Typography>
+          </Box>
         </DialogContent>
         <DialogActions sx={{ px: 3, pb: 2 }}>
           <Button onClick={() => setOpenBarcodeDialog(false)} color="inherit" variant="outlined" sx={{ borderRadius: 1.5 }}>
@@ -738,17 +799,74 @@ const Products = () => {
                     </Typography>
                   )}
                 </Box>
-                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1, width: '100%' }}>
-                  <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 600 }}>
-                    Barcode Sticker
+                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1.5, width: '100%' }}>
+                  <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 700, fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: 0.5 }}>
+                    Sticker Preview (50x30mm)
                   </Typography>
-                  <BarcodeRenderer value={viewProduct.barcode} svgId="view-dialog-barcode-svg" />
+                  
+                  {/* Miniature Sticker Preview */}
+                  <Box
+                    sx={{
+                      width: '100%',
+                      maxWidth: '220px',
+                      height: '132px', // Scaled preview
+                      bgcolor: '#fff',
+                      borderRadius: 1.5,
+                      p: 1.5,
+                      boxSizing: 'border-box',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)',
+                    }}
+                  >
+                    {/* Product Name */}
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        fontSize: '10px',
+                        fontWeight: 700,
+                        color: '#0f172a',
+                        lineHeight: 1.2,
+                        textAlign: 'center',
+                        maxHeight: '30px',
+                        overflow: 'hidden',
+                        display: '-webkit-box',
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: 'vertical',
+                        width: '100%'
+                      }}
+                    >
+                      {viewProduct.name}
+                    </Typography>
+
+                    {/* Barcode SVG Container */}
+                    <Box sx={{ width: '100%', height: '40px', display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden' }}>
+                      <Barcode 
+                        value={viewProduct.barcode}
+                        format="CODE128"
+                        width={1.0}
+                        height={40}
+                        displayValue={false}
+                        background="transparent"
+                        margin={0}
+                        id="view-dialog-barcode-svg"
+                      />
+                    </Box>
+
+                    {/* Barcode Value */}
+                    <Typography variant="caption" sx={{ fontFamily: 'monospace', fontWeight: 700, fontSize: '9px', color: '#1e293b', letterSpacing: '0.5px' }}>
+                      {viewProduct.barcode}
+                    </Typography>
+                  </Box>
+
                   <Button
                     variant="outlined"
                     size="small"
                     startIcon={<PrintIcon />}
                     onClick={() => handlePrintStickerFromView(viewProduct)}
-                    sx={{ textTransform: 'none', borderRadius: 1.5, mt: 1 }}
+                    sx={{ textTransform: 'none', borderRadius: 1.5, mt: 1, width: '100%', maxWidth: '220px' }}
                   >
                     Print Sticker
                   </Button>

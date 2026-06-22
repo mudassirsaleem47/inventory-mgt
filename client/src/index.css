@@ -1,5 +1,6 @@
-@import "tailwindcss";
-
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 body {
   font-family: 'Inter', sans-serif;
@@ -27,23 +28,6 @@ body {
   --shadow-premium-val: 0 3px 6px rgba(0, 0, 0, 0.04);
 }
 
-@theme {
-  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-  --color-primary: #0099ff;    
-  --color-primary-hover: #1188ff;
-  --color-accent: #f97316;
-  --color-muted: #94a3b8;
-  --color-success: #10b981;
-  --color-danger: #ef4444;
-  --color-main: var(--main-bg);          
-  --color-surface: var(--surface-bg);       
-  --color-surface-hover: var(--surface-hover);
-  --color-text-primary: var(--text-primary);
-  --color-text-secondary: var(--text-secondary);
-  --color-border: var(--border-color);
-  --shadow-premium: var(--shadow-premium-val);
-}
-
 /* Slim Premium Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
@@ -51,28 +35,28 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-main); 
+  background: var(--main-bg); 
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-surface); 
+  background: var(--surface-bg); 
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-border); 
+  background: var(--border-color); 
 }
 
-@utility flex-center {
+.flex-center {
   @apply flex items-center justify-center;
 }
 
-@utility no-scrollbar {
+.no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
-  &::-webkit-scrollbar {
-    display: none;
-  }
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
 .custom-scrollbar {

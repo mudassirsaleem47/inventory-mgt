@@ -43,6 +43,7 @@ const POS = () => {
   const [products, setProducts] = useState([]);
   const [cart, setCart] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [productInputValue, setProductInputValue] = useState('');
   const [quantity, setQuantity] = useState(1);
   const [discountPercent, setDiscountPercent] = useState(0);
   const [cash, setCash] = useState('');
@@ -302,6 +303,7 @@ const POS = () => {
 
     // Reset input fields
     setSelectedProduct(null);
+    setProductInputValue('');
     setQuantity(1);
 
     // Refocus the Autocomplete input field
@@ -339,6 +341,9 @@ const POS = () => {
 
   const handleClearCart = () => {
     setCart([]);
+    setSelectedProduct(null);
+    setProductInputValue('');
+    setQuantity(1);
     setDiscountPercent(0);
     setCash('');
     setLastSale(null);
@@ -535,7 +540,7 @@ const POS = () => {
                   onChange={(event, newValue) => {
                     setSelectedProduct(newValue);
                     if (newValue) {
-                      // Focus the quantity input field when product is selected
+                      // Focus the quantity input field when product is selected (manual selection workflow)
                       setTimeout(() => {
                         if (quantityInputRef.current) {
                           quantityInputRef.current.focus();
@@ -544,20 +549,20 @@ const POS = () => {
                       }, 50);
                     }
                   }}
+                  inputValue={productInputValue}
                   onInputChange={(event, newInputValue, reason) => {
                     // Smart barcode scanning match
                     if (reason === 'input') {
                       const matched = products.find(p => p.barcode && p.barcode.toLowerCase() === newInputValue.toLowerCase().trim());
                       if (matched) {
-                        setSelectedProduct(matched);
-                        setTimeout(() => {
-                          if (quantityInputRef.current) {
-                            quantityInputRef.current.focus();
-                            quantityInputRef.current.select();
-                          }
-                        }, 50);
+                        // Hands-free instant barcode scan add-to-cart
+                        addToCart(matched, 1);
+                        setSelectedProduct(null);
+                        setProductInputValue('');
+                        return; // Done
                       }
                     }
+                    setProductInputValue(newInputValue);
                   }}
                   filterOptions={(options, state) => {
                     const query = state.inputValue.toLowerCase().trim();
