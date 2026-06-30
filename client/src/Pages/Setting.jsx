@@ -12,15 +12,25 @@ import {
   Alert,
   Snackbar,
   Divider,
-  Avatar
+  Avatar,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Checkbox,
+  FormControlLabel
 } from '@mui/material';
 import {
   Save as SaveIcon,
   CloudUpload as UploadIcon,
   Store as StoreIcon,
   Payments as PaymentsIcon,
-  Receipt as ReceiptIcon
+  Receipt as ReceiptIcon,
+  Print as PrintIcon,
+  CheckCircle as CheckCircleIcon,
+  Usb as UsbIcon
 } from '@mui/icons-material';
+import { usbPrinter } from '../utils/usbPrinter';
 
 const API_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? 'http://localhost:5000' : (import.meta.env.VITE_API_URL && !import.meta.env.VITE_API_URL.includes('localhost') ? import.meta.env.VITE_API_URL : window.location.origin);
 
@@ -31,6 +41,20 @@ const Setting = () => {
   const [successMsg, setSuccessMsg] = useState('');
   const [logoFile, setLogoFile] = useState(null);
   const [logoPreview, setLogoPreview] = useState('');
+
+  // Printer Configuration States
+  const [printMethod, setPrintMethod] = useState(() => localStorage.getItem('printer_method') || 'browser');
+  const [paperSize, setPaperSize] = useState(() => localStorage.getItem('printer_paper_size') || '80mm');
+  const [autoPrint, setAutoPrint] = useState(() => {
+    const stored = localStorage.getItem('printer_auto_print');
+    return stored === null ? true : stored === 'true';
+  });
+  const [printBarcode, setPrintBarcode] = useState(() => {
+    const stored = localStorage.getItem('printer_print_barcode');
+    return stored === null ? true : stored === 'true';
+  });
+  const [usbConnected, setUsbConnected] = useState(false);
+  const [usbDeviceName, setUsbDeviceName] = useState('');
 
   const [formData, setFormData] = useState({
     storeName: '',
@@ -96,6 +120,17 @@ const Setting = () => {
 
   useEffect(() => {
     fetchSettings();
+    // Auto-connect to WebUSB printer if previously connected
+    if (localStorage.getItem('usb_printer_connected') === 'true') {
+      usbPrinter.autoConnect().then(dev => {
+        if (dev) {
+          setUsbConnected(true);
+          setUsbDeviceName(dev.productName || 'USB Printer');
+        }
+      }).catch(err => {
+        console.error("Auto connect failed:", err);
+      });
+    }
   }, []);
 
   const handleLogoChange = (e) => {
@@ -107,6 +142,72 @@ const Setting = () => {
       }
       setLogoFile(file);
       setLogoPreview(URL.createObjectURL(file));
+    }
+  };
+
+  const handlePrintMethodChange = (val) => {
+    setPrintMethod(val);
+    localStorage.setItem('printer_method', val);
+  };
+  const handlePaperSizeChange = (val) => {
+    setPaperSize(val);
+    localStorage.setItem('printer_paper_size', val);
+  };
+  const handleAutoPrintChange = (val) => {
+    setAutoPrint(val);
+    localStorage.setItem('printer_auto_print', String(val));
+  };
+  const handlePrintBarcodeChange = (val) => {
+    setPrintBarcode(val);
+    localStorage.setItem('printer_print_barcode', String(val));
+  };
+
+  const handleConnectUsb = async () => {
+    try {
+      setError('');
+      const dev = await usbPrinter.connect();
+      setUsbConnected(true);
+      setUsbDeviceName(dev.productName || 'USB Printer');
+      setSuccessMsg(`Successfully connected to printer: ${dev.productName || 'USB Printer'}`);
+    } catch (err) {
+      console.error(err);
+      setError('Failed to connect USB printer: ' + err.message);
+      setUsbConnected(false);
+      setUsbDeviceName('');
+    }
+  };
+
+  const handleTestPrint = async () => {
+    try {
+      setError('');
+      setSuccessMsg('');
+      const testSale = {
+        receiptNo: 'TEST-0001',
+        createdAt: new Date().toISOString(),
+        totalAmount: 150.00,
+        discount: 0,
+        paidAmount: 150.00,
+        change: 0,
+        items: [
+          { name: 'Test Product 1', quantity: 1, price: 100.00, total: 100.00 },
+          { name: 'Test Product 2', quantity: 1, price: 50.00, total: 50.00 }
+        ]
+      };
+      
+      const storeSettings = {
+        storeName: formData.storeName || 'Test Store',
+        address: formData.address || '123 Test Street',
+        phone: formData.phone || '123-456-7890',
+        email: formData.email || 'test@example.com',
+        currency: formData.currency || 'Rs.',
+        receiptFooter: formData.receiptFooter || 'Test print successful!'
+      };
+
+      await usbPrinter.printReceipt(testSale, storeSettings, paperSize, printBarcode);
+      setSuccessMsg('Test receipt printed successfully!');
+    } catch (err) {
+      console.error(err);
+      setError('Test print failed: ' + err.message);
     }
   };
 
@@ -305,6 +406,133 @@ const Setting = () => {
                   value={formData.receiptFooter}
                   onChange={(e) => setFormData({ ...formData, receiptFooter: e.target.value })}
                 />
+              </CardContent>
+            </Card>
+
+            {/* Printer Settings Card */}
+            <Card sx={{ border: '1px solid #e2e8f0', borderRadius: 1.5, mt: 3 }}>
+              <CardContent sx={{ p: 3 }}>
+                <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 2.5 }}>
+                  <PrintIcon sx={{ color: '#2563eb' }} />
+                  <Typography variant="subtitle1" sx={{ fontWeight: 700, color: '#0f172a' }}>
+                    Printer Settings
+                  </Typography>
+                </Stack>
+                <Divider sx={{ mb: 3 }} />
+
+                <Stack spacing={2.5}>
+                  {/* Print Method Select */}
+                  <FormControl size="small" fullWidth variant="outlined">
+                    <InputLabel id="print-method-label">Print Method</InputLabel>
+                    <Select
+                      labelId="print-method-label"
+                      label="Print Method"
+                      value={printMethod}
+                      onChange={(e) => handlePrintMethodChange(e.target.value)}
+                    >
+                      <MenuItem value="browser">Browser Print Dialog</MenuItem>
+                      <MenuItem value="usb">Direct USB Print (ESC/POS)</MenuItem>
+                    </Select>
+                  </FormControl>
+
+                  {/* Paper Width Select */}
+                  <FormControl size="small" fullWidth variant="outlined">
+                    <InputLabel id="paper-size-label">Paper Width</InputLabel>
+                    <Select
+                      labelId="paper-size-label"
+                      label="Paper Width"
+                      value={paperSize}
+                      onChange={(e) => handlePaperSizeChange(e.target.value)}
+                    >
+                      <MenuItem value="80mm">80mm (Standard)</MenuItem>
+                      <MenuItem value="58mm">58mm (Mini)</MenuItem>
+                    </Select>
+                  </FormControl>
+
+                  {/* Autoprint Checkbox */}
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={autoPrint}
+                        onChange={(e) => handleAutoPrintChange(e.target.checked)}
+                        size="small"
+                      />
+                    }
+                    label={
+                      <Typography variant="body2" sx={{ color: '#475569' }}>
+                        Auto-Print on Checkout
+                      </Typography>
+                    }
+                    sx={{ m: 0 }}
+                  />
+
+                  {/* Print Barcode Checkbox */}
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={printBarcode}
+                        onChange={(e) => handlePrintBarcodeChange(e.target.checked)}
+                        size="small"
+                      />
+                    }
+                    label={
+                      <Typography variant="body2" sx={{ color: '#475569' }}>
+                        Print Barcode on Receipt
+                      </Typography>
+                    }
+                    sx={{ m: 0 }}
+                  />
+
+                  {/* WebUSB Connection Section */}
+                  {printMethod === 'usb' && (
+                    <Box sx={{ borderTop: '1px solid #f1f5f9', pt: 2, display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+                      {usbConnected ? (
+                        <Alert 
+                          severity="success" 
+                          icon={<CheckCircleIcon fontSize="inherit" />}
+                          sx={{ py: 0.5, px: 1.5, '& .MuiAlert-message': { fontSize: '0.775rem' } }}
+                        >
+                          Connected: <strong>{usbDeviceName}</strong>
+                        </Alert>
+                      ) : (
+                        <Alert 
+                          severity="warning" 
+                          icon={<UsbIcon fontSize="inherit" />}
+                          sx={{ py: 0.5, px: 1.5, '& .MuiAlert-message': { fontSize: '0.775rem' } }}
+                        >
+                          No USB Printer connected.
+                        </Alert>
+                      )}
+
+                      <Stack direction="row" spacing={2}>
+                        <Button
+                          variant="outlined"
+                          color="primary"
+                          size="small"
+                          fullWidth
+                          startIcon={<UsbIcon />}
+                          onClick={handleConnectUsb}
+                          sx={{ textTransform: 'none', borderRadius: 1.5 }}
+                        >
+                          {usbConnected ? 'Change Printer' : 'Connect USB Printer'}
+                        </Button>
+                        {usbConnected && (
+                          <Button
+                            variant="outlined"
+                            color="secondary"
+                            size="small"
+                            fullWidth
+                            startIcon={<PrintIcon />}
+                            onClick={handleTestPrint}
+                            sx={{ textTransform: 'none', borderRadius: 1.5 }}
+                          >
+                            Print Test Receipt
+                          </Button>
+                        )}
+                      </Stack>
+                    </Box>
+                  )}
+                </Stack>
               </CardContent>
             </Card>
           </Grid>

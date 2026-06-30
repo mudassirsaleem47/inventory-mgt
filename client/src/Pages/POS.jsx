@@ -29,8 +29,12 @@ import {
   Divider,
   Snackbar,
   Autocomplete,
+  Checkbox,
+  FormControlLabel,
 } from '@mui/material';
-import { Delete as DeleteIcon, Print as PrintIcon, Clear as ClearIcon, AssignmentReturn as ReturnIcon } from '@mui/icons-material';
+import { Delete as DeleteIcon, Print as PrintIcon, Clear as ClearIcon, AssignmentReturn as ReturnIcon, CheckCircle as CheckCircleIcon, Usb as UsbIcon } from '@mui/icons-material';
+import Barcode from 'react-barcode';
+import { usbPrinter } from '../utils/usbPrinter';
 
 const API_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? 'http://localhost:5000' : (import.meta.env.VITE_API_URL && !import.meta.env.VITE_API_URL.includes('localhost') ? import.meta.env.VITE_API_URL : window.location.origin);
 
@@ -58,6 +62,20 @@ const POS = () => {
   const [error, setError] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
   const [lastSale, setLastSale] = useState(null);
+
+  // Printer Configuration States
+  const [printMethod, setPrintMethod] = useState(() => localStorage.getItem('printer_method') || 'browser');
+  const [paperSize, setPaperSize] = useState(() => localStorage.getItem('printer_paper_size') || '80mm');
+  const [autoPrint, setAutoPrint] = useState(() => {
+    const stored = localStorage.getItem('printer_auto_print');
+    return stored === null ? true : stored === 'true';
+  });
+  const [printBarcode, setPrintBarcode] = useState(() => {
+    const stored = localStorage.getItem('printer_print_barcode');
+    return stored === null ? true : stored === 'true';
+  });
+  const [usbConnected, setUsbConnected] = useState(false);
+  const [usbDeviceName, setUsbDeviceName] = useState('');
 
   // Return / Refund States
   const [openReturnDialog, setOpenReturnDialog] = useState(false);
@@ -243,6 +261,18 @@ const POS = () => {
     fetchSettings();
     fetchProducts();
     focusProductField();
+
+    // Auto-connect to WebUSB printer if previously connected
+    if (localStorage.getItem('usb_printer_connected') === 'true') {
+      usbPrinter.autoConnect().then(dev => {
+        if (dev) {
+          setUsbConnected(true);
+          setUsbDeviceName(dev.productName || 'USB Printer');
+        }
+      }).catch(err => {
+        console.error("Auto connect failed:", err);
+      });
+    }
   }, []);
 
   const focusProductField = () => {
@@ -253,15 +283,34 @@ const POS = () => {
     }, 200);
   };
 
+  const handlePrintReceipt = async (saleToPrint = lastSale) => {
+    if (!saleToPrint) return;
+    if (printMethod === 'usb') {
+      try {
+        setError('');
+        await usbPrinter.printReceipt(saleToPrint, settings, paperSize, printBarcode);
+        setSuccessMsg('Receipt printed successfully via USB!');
+      } catch (err) {
+        console.error(err);
+        setError('Direct USB printing failed: ' + err.message + '. Falling back to Browser Print.');
+        window.print();
+      }
+    } else {
+      window.print();
+    }
+  };
+
   // Auto-print receipt when checkout completes
   useEffect(() => {
-    if (lastSale) {
+    if (lastSale && autoPrint) {
       const timer = setTimeout(() => {
-        window.print();
+        handlePrintReceipt(lastSale);
       }, 500);
       return () => clearTimeout(timer);
     }
-  }, [lastSale]);
+  }, [lastSale, autoPrint, printMethod, paperSize, printBarcode]);
+
+
 
   const addToCart = (product, qty = 1) => {
     const parsedQty = parseFloat(qty) || 1;
@@ -418,63 +467,33 @@ const POS = () => {
   };
 
   const handlePrint = () => {
-    window.print();
+    handlePrintReceipt(lastSale);
   };
 
   return (
     <Box sx={{ width: '100%', maxWidth: 'none', display: 'flex', flexDirection: 'column', gap: 3, fontFamily: '"Inter", sans-serif' }}>
-      {/* Print-Only Style Overlay */}
-      <style dangerouslySetInnerHTML={{
-        __html: `
-        @media print {
-          body * {
-            visibility: hidden;
-          }
-          .thermal-receipt, .thermal-receipt * {
-            visibility: visible;
-          }
-          .thermal-receipt {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 80mm;
-            padding: 5mm;
-            font-family: monospace;
-            font-size: 12px;
-            line-height: 1.4;
-            color: #000;
-          }
-          .thermal-receipt-divider {
-            border-top: 1px dashed #000;
-            margin: 4px 0;
-          }
-          .thermal-receipt-center {
-            text-align: center;
-          }
-          .thermal-receipt-flex {
-            display: flex;
-            justify-content: space-between;
-          }
-        }
-      `}} />
-
       {/* Actual printed receipt layout hidden on screen */}
-      <Box className="thermal-receipt" sx={{ display: 'none' }}>
+      <Box className={`thermal-receipt width-${paperSize}`}>
         <div className="thermal-receipt-center">
-          <h3>=== {settings.storeName.toUpperCase()} ===</h3>
-          <p>Inventory POS System</p>
+          <Typography variant="subtitle1" sx={{ fontWeight: 'bold', m: 0 }}>
+            {settings.storeName.toUpperCase()}
+          </Typography>
+          {settings.address && <p style={{ margin: '2px 0' }}>{settings.address}</p>}
+          {settings.phone && <p style={{ margin: '2px 0' }}>Tel: {settings.phone}</p>}
+          <p style={{ margin: '2px 0' }}>Inventory POS System</p>
         </div>
         <div className="thermal-receipt-divider" />
         <div className="thermal-receipt-flex">
-          <span>Date: {lastSale ? new Date(lastSale.createdAt).toLocaleDateString() : new Date().toLocaleDateString()}</span>
-          <span>No: {lastSale?.receiptNo || 'R-XXXX'}</span>
+          <span>Date: {lastSale ? new Date(lastSale.createdAt).toLocaleString() : new Date().toLocaleString()}</span>
+        </div>
+        <div className="thermal-receipt-flex">
+          <span>Receipt No: {lastSale?.receiptNo || 'R-XXXX'}</span>
         </div>
         <div className="thermal-receipt-divider" />
 
-        {/* If print is triggered after sale, show real items; otherwise fallback to current cart */}
-        {(lastSale ? lastSale.items : cart).map((item) => (
-          <div key={item.id} style={{ margin: '4px 0' }}>
-            <div>{item.name}</div>
+        {(lastSale ? lastSale.items : cart).map((item, idx) => (
+          <div key={item.id || idx} style={{ margin: '6px 0' }}>
+            <div style={{ fontWeight: 'bold' }}>{item.name}</div>
             <div className="thermal-receipt-flex" style={{ paddingLeft: '8px' }}>
               <span>{item.qty || item.quantity} x {settings.currency}{parseFloat(item.price).toFixed(2)}</span>
               <span>{settings.currency}{parseFloat(item.total).toFixed(2)}</span>
@@ -483,27 +502,46 @@ const POS = () => {
         ))}
 
         <div className="thermal-receipt-divider" />
+        <div className="thermal-receipt-flex">
+          <span>Subtotal:</span>
+          <span>{settings.currency}{((lastSale ? (lastSale.totalAmount + lastSale.discount) : (total + finalDiscount))).toFixed(2)}</span>
+        </div>
+        {(lastSale ? lastSale.discount : finalDiscount) > 0 && (
+          <div className="thermal-receipt-flex">
+            <span>Discount:</span>
+            <span>-{settings.currency}{(lastSale ? lastSale.discount : finalDiscount).toFixed(2)}</span>
+          </div>
+        )}
         <div className="thermal-receipt-flex" style={{ fontWeight: 'bold' }}>
-          <span>Total:</span>
+          <span>Total Amount:</span>
           <span>{settings.currency}{(lastSale ? lastSale.totalAmount : total).toFixed(2)}</span>
         </div>
         <div className="thermal-receipt-flex">
-          <span>Discount:</span>
-          <span>{settings.currency}{(lastSale ? lastSale.discount : finalDiscount).toFixed(2)}</span>
-        </div>
-        <div className="thermal-receipt-flex">
-          <span>Paid:</span>
+          <span>Paid Cash:</span>
           <span>{settings.currency}{(lastSale ? lastSale.paidAmount : paid).toFixed(2)}</span>
         </div>
         <div className="thermal-receipt-flex">
-          <span>Change:</span>
+          <span>Change Return:</span>
           <span>{settings.currency}{(lastSale ? lastSale.change : change).toFixed(2)}</span>
         </div>
         <div className="thermal-receipt-divider" />
-        <div className="thermal-receipt-center" style={{ marginTop: '10px' }}>
-          <p>{settings.receiptFooter}</p>
-          <p>=============================</p>
+        <div className="thermal-receipt-center" style={{ marginTop: '10px', marginBottom: '10px' }}>
+          <p style={{ margin: '4px 0' }}>{settings.receiptFooter}</p>
+          <p style={{ margin: '4px 0' }}>=============================</p>
         </div>
+
+        {/* Scannable Barcode at bottom of printed receipt */}
+        {printBarcode && lastSale?.receiptNo && (
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 2, mb: 1 }}>
+            <Barcode 
+              value={lastSale.receiptNo.toUpperCase()} 
+              width={paperSize === '58mm' ? 1.0 : 1.3} 
+              height={40} 
+              fontSize={10}
+              margin={0}
+            />
+          </Box>
+        )}
       </Box>
 
       {/* Screen layout */}
@@ -689,7 +727,7 @@ const POS = () => {
           </Box>
 
           {/* Right Side: Total & Checkout */}
-          <Box sx={{ width: { xs: '100%', md: 'calc(30% - 12px)' }, flexShrink: 0 }}>
+          <Box sx={{ width: { xs: '100%', md: 'calc(30% - 12px)' }, flexShrink: 0, display: 'flex', flexDirection: 'column', gap: 3 }}>
             <Card sx={{ border: '1px solid #e2e8f0', borderRadius: 1, boxShadow: '0 1px 2px rgba(0,0,0,0.05)', p: 3 }}>
               <Typography variant="h6" sx={{ fontWeight: 700, mb: 2 }}>
                 Checkout Summary
@@ -777,6 +815,8 @@ const POS = () => {
                 )}
               </Stack>
             </Card>
+
+
           </Box>
         </Box>
       </Box>

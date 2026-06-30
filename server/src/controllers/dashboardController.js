@@ -4,7 +4,7 @@ const prisma = require('../../lib/prisma');
 // @route GET /api/dashboard/stats
 const getDashboardStats = async (req, res) => {
   try {
-    const [products, sales, categories, suppliers, settings, supplierInvoices, expenses, loans] = await Promise.all([
+    const [products, sales, categories, suppliers, settings, supplierInvoices, expenses, loans, customers] = await Promise.all([
       prisma.product.findMany({
         include: { category: { select: { id: true, name: true } } },
         orderBy: { createdAt: 'desc' }
@@ -31,6 +31,9 @@ const getDashboardStats = async (req, res) => {
       }),
       prisma.loan.findMany({
         orderBy: { dueDate: 'asc' }
+      }),
+      prisma.customer.findMany({
+        orderBy: { createdAt: 'desc' }
       })
     ]);
 
@@ -42,7 +45,8 @@ const getDashboardStats = async (req, res) => {
       settings: settings || null,
       supplierInvoices: supplierInvoices || [],
       expenses: expenses || [],
-      loans: loans || []
+      loans: loans || [],
+      customers: customers || []
     });
   } catch (error) {
     console.error('Dashboard stats error:', error);
