@@ -2,12 +2,23 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
 const { getInvoices, getInvoice, createInvoice, updateInvoice, deleteInvoices } = require('../controllers/supplierInvoiceController');
+
+const isVercel = process.env.VERCEL === '1' || !!process.env.VERCEL;
+const uploadDir = isVercel
+  ? path.join('/tmp', 'uploads/supplier-invoices')
+  : path.join(__dirname, '../../uploads/supplier-invoices');
+
+// Ensure upload directory exists
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
 
 // Multer config
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, '../../uploads/supplier-invoices'));
+    cb(null, uploadDir);
   },
   filename: (req, file, cb) => {
     const unique = Date.now() + '-' + Math.round(Math.random() * 1e9);

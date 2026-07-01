@@ -6,7 +6,10 @@ const fs = require('fs');
 const { getProducts, getProductByBarcode, createProduct, updateProduct, deleteProducts, getProductById, importProducts } = require('../controllers/productController');
 
 // Ensure upload directory exists
-const uploadDir = path.join(__dirname, '../../uploads/products');
+const isVercel = process.env.VERCEL === '1' || !!process.env.VERCEL;
+const uploadDir = isVercel
+  ? path.join('/tmp', 'uploads/products')
+  : path.join(__dirname, '../../uploads/products');
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }

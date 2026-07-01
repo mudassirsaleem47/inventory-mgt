@@ -24,7 +24,11 @@ app.use(cors());
 app.use(express.json());
 
 // Serve uploaded files statically
-app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+const isVercel = process.env.VERCEL === '1' || !!process.env.VERCEL; ``
+const uploadsPath = isVercel
+  ? path.join('/tmp', 'uploads')
+  : path.join(__dirname, '../uploads');
+app.use('/uploads', express.static(uploadsPath));
 
 // Routes
 app.use('/api/auth', authRoutes);
