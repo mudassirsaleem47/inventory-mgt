@@ -195,7 +195,7 @@ const DashboardOverview = () => {
       {/* 1. Top Quick Action Row */}
       <Grid container spacing={2} sx={{ mb: 3 }}>
         {quickActions.map((action, idx) => (
-          <Grid item xs={6} md={3} key={idx}>
+          <Grid size={{ xs: 6, md: 3 }} key={idx}>
             <Card
               component={Link}
               to={action.path}
@@ -272,7 +272,7 @@ const DashboardOverview = () => {
       {/* 3. Four Big Colored Stats Cards */}
       <Grid container spacing={3} sx={{ mb: 3 }}>
         {/* TOTAL RECEIVABLE (Red) */}
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <Card 
             sx={{ 
               background: '#f44336', 
@@ -307,7 +307,7 @@ const DashboardOverview = () => {
         </Grid>
 
         {/* TOTAL RECEIVED AMOUNT (Blue) */}
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <Card 
             sx={{ 
               background: '#2196f3', 
@@ -342,7 +342,7 @@ const DashboardOverview = () => {
         </Grid>
 
         {/* TOTAL DISCOUNT GIVEN (Orange) */}
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <Card 
             sx={{ 
               background: '#ff9800', 
@@ -377,7 +377,7 @@ const DashboardOverview = () => {
         </Grid>
 
         {/* TOTAL REVENUE (Green) */}
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <Card 
             sx={{ 
               background: '#4caf50', 
@@ -424,7 +424,7 @@ const DashboardOverview = () => {
           { label: 'TOTAL ITEMS IN STOCK', value: totalItemsInStockCount, icon: <CartIcon sx={{ fontSize: 20 }} />, color: '#42a5f5', bg: '#eff6ff' },
           { label: 'TOTAL ITEM CATEGORIES', value: totalCategoriesCount, icon: <CartIcon sx={{ fontSize: 20 }} />, color: '#ffa726', bg: '#fff7ed' },
         ].map((card, idx) => (
-          <Grid item xs={12} sm={6} md={3} key={idx}>
+          <Grid size={{ xs: 12, sm: 6, md: 3 }} key={idx}>
             <Card 
               sx={{ 
                 bgcolor: '#ffffff', 
@@ -468,7 +468,7 @@ const DashboardOverview = () => {
       {/* 5. Bottom Section: 365 Days Sales Chart & Recent Invoices */}
       <Grid container spacing={3}>
         {/* Left Column: Donut Chart */}
-        <Grid item xs={12} lg={4}>
+        <Grid size={{ xs: 12, lg: 4 }}>
           <Card 
             sx={{ 
               bgcolor: '#ffffff', 
@@ -573,7 +573,7 @@ const DashboardOverview = () => {
         </Grid>
 
         {/* Right Column: Recent Invoices Table */}
-        <Grid item xs={12} lg={8}>
+        <Grid size={{ xs: 12, lg: 8 }}>
           <Card 
             sx={{ 
               bgcolor: '#ffffff', 
