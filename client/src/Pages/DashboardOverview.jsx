@@ -33,11 +33,11 @@ import {
 } from '@mui/icons-material';
 import dayjs from 'dayjs';
 
-const API_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') 
-  ? 'http://localhost:5000' 
-  : (import.meta.env.VITE_API_URL && !import.meta.env.VITE_API_URL.includes('localhost') 
-      ? import.meta.env.VITE_API_URL 
-      : window.location.origin);
+const API_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+  ? 'http://localhost:5000'
+  : (import.meta.env.VITE_API_URL && !import.meta.env.VITE_API_URL.includes('localhost')
+    ? import.meta.env.VITE_API_URL
+    : window.location.origin);
 
 const DashboardOverview = () => {
   const navigate = useNavigate();
@@ -68,7 +68,7 @@ const DashboardOverview = () => {
     if (!quiet) setLoading(true);
     else setIsRefreshing(true);
     setError('');
-    
+
     try {
       const token = getToken();
       if (!token) return;
@@ -137,7 +137,7 @@ const DashboardOverview = () => {
   // Small Cards Calculations
   const totalInvoiceCount = sales.length;
   const totalSalesRevenue = sales.reduce((sum, s) => sum + s.totalAmount, 0);
-  
+
   // Count of sold product types
   const soldProductTypesSet = new Set();
   sales.forEach(sale => {
@@ -161,8 +161,8 @@ const DashboardOverview = () => {
   const totalCategoriesCount = categories.length;
 
   // Chart percentage
-  const totalReceivablePercent = totalRevenue !== 0 
-    ? (Math.abs(totalReceivable) / Math.abs(totalRevenue)) * 100 
+  const totalReceivablePercent = totalRevenue !== 0
+    ? (Math.abs(totalReceivable) / Math.abs(totalRevenue)) * 100
     : 0;
 
   // Donut chart segments calculations
@@ -212,8 +212,7 @@ const DashboardOverview = () => {
                 boxShadow: '0 1px 3px rgba(0,0,0,0.02)',
                 transition: 'all 0.2s ease',
                 '&:hover': {
-                  transform: 'translateY(-2px)',
-                  boxShadow: '0 4px 12px rgba(37, 99, 235, 0.08)',
+                  transform: 'translateY(-1px)',
                   borderColor: '#3b82f6',
                   '& .action-icon-box': {
                     color: '#2563eb'
@@ -221,14 +220,14 @@ const DashboardOverview = () => {
                 }
               }}
             >
-              <Box 
+              <Box
                 className="action-icon-box"
-                sx={{ 
-                  color: '#2563eb', 
-                  mb: 1, 
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  justifyContent: 'center' 
+                sx={{
+                  color: '#2563eb',
+                  mb: 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
                 }}
               >
                 {action.icon}
@@ -246,25 +245,25 @@ const DashboardOverview = () => {
         <Typography variant="body2" sx={{ fontWeight: 700, color: '#475569', fontSize: '0.85rem', tracking: '0.5px' }}>
           Last 365 Days Reports
         </Typography>
-        <IconButton 
+        <IconButton
           onClick={handleRefreshClick}
           size="small"
-          sx={{ 
-            color: '#475569', 
-            bgcolor: '#ffffff', 
+          sx={{
+            color: '#475569',
+            bgcolor: '#ffffff',
             border: '1px solid #e5e7eb',
             '&:hover': { bgcolor: '#f8fafc' }
           }}
         >
-          <RefreshIcon 
-            sx={{ 
+          <RefreshIcon
+            sx={{
               fontSize: 16,
               animation: isRefreshing ? 'spin 1s linear infinite' : 'none',
               '@keyframes spin': {
                 '0%': { transform: 'rotate(0deg)' },
                 '100%': { transform: 'rotate(360deg)' }
               }
-            }} 
+            }}
           />
         </IconButton>
       </Box>
@@ -273,10 +272,10 @@ const DashboardOverview = () => {
       <Grid container spacing={3} sx={{ mb: 3 }}>
         {/* TOTAL RECEIVABLE (Red) */}
         <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-          <Card 
-            sx={{ 
-              background: '#f44336', 
-              color: '#ffffff', 
+          <Card
+            sx={{
+              background: '#f44336',
+              color: '#ffffff',
               borderRadius: '6px',
               border: 'none',
               position: 'relative',
@@ -294,24 +293,24 @@ const DashboardOverview = () => {
             <Typography variant="caption" sx={{ fontWeight: 600, color: 'rgba(255,255,255,0.8)', mt: 0.5, letterSpacing: '0.5px', fontSize: '0.72rem' }}>
               TOTAL RECEIVABLE
             </Typography>
-            <CartIcon 
-              sx={{ 
-                position: 'absolute', 
-                bottom: -15, 
-                right: -10, 
-                fontSize: '6.5rem', 
-                color: 'rgba(255, 255, 255, 0.08)' 
-              }} 
+            <CartIcon
+              sx={{
+                position: 'absolute',
+                bottom: -15,
+                right: -10,
+                fontSize: '6.5rem',
+                color: 'rgba(255, 255, 255, 0.08)'
+              }}
             />
           </Card>
         </Grid>
 
         {/* TOTAL RECEIVED AMOUNT (Blue) */}
         <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-          <Card 
-            sx={{ 
-              background: '#2196f3', 
-              color: '#ffffff', 
+          <Card
+            sx={{
+              background: '#2196f3',
+              color: '#ffffff',
               borderRadius: '6px',
               border: 'none',
               position: 'relative',
@@ -329,24 +328,24 @@ const DashboardOverview = () => {
             <Typography variant="caption" sx={{ fontWeight: 600, color: 'rgba(255,255,255,0.8)', mt: 0.5, letterSpacing: '0.5px', fontSize: '0.72rem' }}>
               TOTAL RECEIVED AMOUNT
             </Typography>
-            <BarChartIcon 
-              sx={{ 
-                position: 'absolute', 
-                bottom: -15, 
-                right: -10, 
-                fontSize: '6.5rem', 
-                color: 'rgba(255, 255, 255, 0.08)' 
-              }} 
+            <BarChartIcon
+              sx={{
+                position: 'absolute',
+                bottom: -15,
+                right: -10,
+                fontSize: '6.5rem',
+                color: 'rgba(255, 255, 255, 0.08)'
+              }}
             />
           </Card>
         </Grid>
 
         {/* TOTAL DISCOUNT GIVEN (Orange) */}
         <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-          <Card 
-            sx={{ 
-              background: '#ff9800', 
-              color: '#ffffff', 
+          <Card
+            sx={{
+              background: '#ff9800',
+              color: '#ffffff',
               borderRadius: '6px',
               border: 'none',
               position: 'relative',
@@ -364,24 +363,24 @@ const DashboardOverview = () => {
             <Typography variant="caption" sx={{ fontWeight: 600, color: 'rgba(255,255,255,0.8)', mt: 0.5, letterSpacing: '0.5px', fontSize: '0.72rem' }}>
               TOTAL DISCOUNT GIVEN
             </Typography>
-            <BarChartIcon 
-              sx={{ 
-                position: 'absolute', 
-                bottom: -15, 
-                right: -10, 
-                fontSize: '6.5rem', 
-                color: 'rgba(255, 255, 255, 0.08)' 
-              }} 
+            <BarChartIcon
+              sx={{
+                position: 'absolute',
+                bottom: -15,
+                right: -10,
+                fontSize: '6.5rem',
+                color: 'rgba(255, 255, 255, 0.08)'
+              }}
             />
           </Card>
         </Grid>
 
         {/* TOTAL REVENUE (Green) */}
         <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-          <Card 
-            sx={{ 
-              background: '#4caf50', 
-              color: '#ffffff', 
+          <Card
+            sx={{
+              background: '#4caf50',
+              color: '#ffffff',
               borderRadius: '6px',
               border: 'none',
               position: 'relative',
@@ -399,14 +398,14 @@ const DashboardOverview = () => {
             <Typography variant="caption" sx={{ fontWeight: 600, color: 'rgba(255,255,255,0.8)', mt: 0.5, letterSpacing: '0.5px', fontSize: '0.72rem' }}>
               TOTAL REVENUE
             </Typography>
-            <TrendingIcon 
-              sx={{ 
-                position: 'absolute', 
-                bottom: -15, 
-                right: -10, 
-                fontSize: '6.5rem', 
-                color: 'rgba(255, 255, 255, 0.08)' 
-              }} 
+            <TrendingIcon
+              sx={{
+                position: 'absolute',
+                bottom: -15,
+                right: -10,
+                fontSize: '6.5rem',
+                color: 'rgba(255, 255, 255, 0.08)'
+              }}
             />
           </Card>
         </Grid>
@@ -425,10 +424,10 @@ const DashboardOverview = () => {
           { label: 'TOTAL ITEM CATEGORIES', value: totalCategoriesCount, icon: <CartIcon sx={{ fontSize: 20 }} />, color: '#ffa726', bg: '#fff7ed' },
         ].map((card, idx) => (
           <Grid size={{ xs: 12, sm: 6, md: 3 }} key={idx}>
-            <Card 
-              sx={{ 
-                bgcolor: '#ffffff', 
-                borderRadius: '6px', 
+            <Card
+              sx={{
+                bgcolor: '#ffffff',
+                borderRadius: '6px',
                 border: '1px solid #e5e7eb',
                 p: 2,
                 boxShadow: '0 1px 3px rgba(0,0,0,0.02)',
@@ -438,16 +437,16 @@ const DashboardOverview = () => {
                 height: 70
               }}
             >
-              <Box 
-                sx={{ 
-                  bgcolor: card.bg, 
-                  color: card.color, 
-                  width: 42, 
-                  height: 42, 
-                  borderRadius: '50%', 
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  justifyContent: 'center' 
+              <Box
+                sx={{
+                  bgcolor: card.bg,
+                  color: card.color,
+                  width: 42,
+                  height: 42,
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
                 }}
               >
                 {card.icon}
@@ -469,10 +468,10 @@ const DashboardOverview = () => {
       <Grid container spacing={3}>
         {/* Left Column: Donut Chart */}
         <Grid size={{ xs: 12, lg: 4 }}>
-          <Card 
-            sx={{ 
-              bgcolor: '#ffffff', 
-              borderRadius: '6px', 
+          <Card
+            sx={{
+              bgcolor: '#ffffff',
+              borderRadius: '6px',
               border: '1px solid #e5e7eb',
               boxShadow: '0 1px 3px rgba(0,0,0,0.02)',
               p: 3,
@@ -523,7 +522,7 @@ const DashboardOverview = () => {
                   strokeDasharray={circ}
                   strokeDashoffset={discountDashoffset}
                   strokeLinecap="round"
-                  style={{ 
+                  style={{
                     transition: 'stroke-dashoffset 0.8s ease-in-out',
                     transform: `rotate(${receivedPct * 3.6}deg)`,
                     transformOrigin: '110px 110px'
@@ -541,7 +540,7 @@ const DashboardOverview = () => {
                   strokeDasharray={circ}
                   strokeDashoffset={receivableDashoffset}
                   strokeLinecap="round"
-                  style={{ 
+                  style={{
                     transition: 'stroke-dashoffset 0.8s ease-in-out',
                     transform: `rotate(${(receivedPct + discountPct) * 3.6}deg)`,
                     transformOrigin: '110px 110px'
@@ -550,22 +549,44 @@ const DashboardOverview = () => {
               </svg>
 
               {/* Text inside donut */}
-              <Box 
-                sx={{ 
-                  position: 'absolute', 
-                  display: 'flex', 
-                  flexDirection: 'column', 
-                  alignItems: 'center', 
+              <Box
+                sx={{
+                  position: 'absolute',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
                   justifyContent: 'center',
                   textAlign: 'center',
-                  width: 130
+                  width: 140
                 }}
               >
-                <Typography variant="body2" sx={{ fontWeight: 800, color: '#0f172a', fontSize: '0.88rem', mb: 0.25 }}>
-                  Total Receivable %
+                <Typography variant="caption" sx={{ fontWeight: 700, color: '#64748b', mb: 0.5, textTransform: 'uppercase', fontSize: '0.72rem', letterSpacing: '0.5px' }}>
+                  Receivable
                 </Typography>
-                <Typography variant="h5" sx={{ fontWeight: 800, color: '#0f172a', fontSize: '1.8rem' }}>
-                  {totalReceivablePercent.toFixed(2)}
+                <Typography variant="h5" sx={{ fontWeight: 800, color: '#0f172a', fontSize: '1.65rem' }}>
+                  {totalReceivablePercent.toFixed(2)}%
+                </Typography>
+              </Box>
+            </Box>
+
+            {/* Legend */}
+            <Box sx={{ mt: 3, display: 'flex', justifyContent: 'center', gap: 2, flexWrap: 'wrap', width: '100%' }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
+                <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: '#4caf50' }} />
+                <Typography variant="caption" sx={{ fontWeight: 600, color: '#64748b', fontSize: '0.72rem' }}>
+                  Received ({receivedPct.toFixed(0)}%)
+                </Typography>
+              </Box>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
+                <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: '#ffa726' }} />
+                <Typography variant="caption" sx={{ fontWeight: 600, color: '#64748b', fontSize: '0.72rem' }}>
+                  Discount ({discountPct.toFixed(0)}%)
+                </Typography>
+              </Box>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
+                <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: '#ef5350' }} />
+                <Typography variant="caption" sx={{ fontWeight: 600, color: '#64748b', fontSize: '0.72rem' }}>
+                  Receivable ({receivablePct.toFixed(0)}%)
                 </Typography>
               </Box>
             </Box>
@@ -574,10 +595,10 @@ const DashboardOverview = () => {
 
         {/* Right Column: Recent Invoices Table */}
         <Grid size={{ xs: 12, lg: 8 }}>
-          <Card 
-            sx={{ 
-              bgcolor: '#ffffff', 
-              borderRadius: '6px', 
+          <Card
+            sx={{
+              bgcolor: '#ffffff',
+              borderRadius: '6px',
               border: '1px solid #e5e7eb',
               boxShadow: '0 1px 3px rgba(0,0,0,0.02)',
               p: 2.5,
@@ -622,11 +643,11 @@ const DashboardOverview = () => {
                           {inv.supplier?.name || 'N/A'}
                         </TableCell>
                         <TableCell sx={{ width: 120 }}>
-                          <Link 
-                            to="/suppliers-invoice" 
-                            style={{ 
-                              color: '#2563eb', 
-                              textDecoration: 'underline', 
+                          <Link
+                            to="/suppliers-invoice"
+                            style={{
+                              color: '#2563eb',
+                              textDecoration: 'underline',
                               fontWeight: 600,
                               fontSize: '0.85rem'
                             }}
@@ -662,7 +683,7 @@ const DashboardOverview = () => {
           </Card>
         </Grid>
       </Grid>
-    </Box>
+    </Box >
   );
 };
 
